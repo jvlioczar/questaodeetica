@@ -496,7 +496,7 @@
     jr.innerHTML = '<div class="jor-n"><strong>' + nl + '</strong><span>' + L('de ' + total + ' textos lidos', 'of ' + total + ' texts read') + '</span></div><div class="jor-n"><strong>' + pc + '%</strong><span>' + L('da coleção', 'of the collection') + '</span></div><div class="jor-n"><strong>' + nd + '</strong><span>' + L('destaques', 'highlights') + '</span></div><div class="jor-n"><strong>' + nn + '</strong><span>' + L('anotações', 'notes') + '</span></div>';
     $('#jor-vols').innerHTML = J.v.map(function (v) {
       var n = Object.keys(lidos).filter(function (k) { return lidos[k] && k.split('-')[0] === String(v[0]); }).length;
-      return '<a class="jor-vol" href="' + BASE + v[3] + '/index.html"><span class="nv">' + v[1] + '</span><span class="jt">' + esc(v[2]) + '</span><span class="jb"><i style="width:' + (100 * n / v[4]) + '%"></i></span><span class="jc">' + n + '/' + v[4] + '</span></a>';
+      return '<a class="jor-vol" href="' + BASE + v[3] + '/"><span class="nv">' + v[1] + '</span><span class="jt">' + esc(v[2]) + '</span><span class="jb"><i style="width:' + (100 * n / v[4]) + '%"></i></span><span class="jc">' + n + '/' + v[4] + '</span></a>';
     }).join('');
     var lista = function () {
       dest = ls.get('jea-dest', {});

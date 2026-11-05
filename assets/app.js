@@ -196,7 +196,7 @@
       var ps = t.split(/\s+/);
       var res = idx.filter(function (x) { return ps.every(function (p) { return x.n.indexOf(p) >= 0; }); })
         .sort(function (a, b) { return (b.nt.indexOf(t) >= 0) - (a.nt.indexOf(t) >= 0); }).slice(0, 30);
-      br.innerHTML = res.map(function (x, i) { return '<a href="' + base + x.u + '"' + (i === 0 ? ' class="sel"' : '') + '>' + esc(x.t) + '<small>' + esc(x.k) + '</small></a>'; }).join('') || '<p class="fino">' + L('Nada encontrado.', 'Nothing found.') + '</p>';
+      br.innerHTML = res.map(function (x, i) { return '<a href="' + ((base + x.u.replace(/(^|\/)index\.html(?=$|#)/, '$1')) || './') + '"' + (i === 0 ? ' class="sel"' : '') + '>' + esc(x.t) + '<small>' + esc(x.k) + '</small></a>'; }).join('') || '<p class="fino">' + L('Nada encontrado.', 'Nothing found.') + '</p>';
     });
     bq.addEventListener('keydown', function (ev) {
       var as = $$('a', br); if (!as.length) return;
