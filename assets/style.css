@@ -603,3 +603,21 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .hero-arte{max-width:430px;align-self:end;justify-self:end;margin-bottom:-1px}
 .hero-arte svg{display:block}
 @media (max-width:860px){.hero-in>div:first-child{padding-bottom:0}.hero-arte{order:1;max-width:240px;justify-self:center;margin-top:4px}}
+
+/* calculadora das teorias */
+.tc-tab{overflow-x:auto;margin:12px 0}
+.tc-tab table{border-collapse:collapse;width:100%;font-size:.9rem}
+.tc-tab th,.tc-tab td{padding:7px 9px;border-bottom:1px solid var(--linha,#dfeaf0);text-align:center;vertical-align:middle}
+.tc-tab thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--suave)}
+.tc-tab tbody th{text-align:left;font-weight:700}
+.tc-tab tbody th small{display:block;font-weight:400;color:var(--suave);font-size:.78rem;line-height:1.3}
+.tc-tab input{width:5.2em;text-align:center;padding:6px 4px;border:1px solid var(--linha,#cfdde6);border-radius:9px;font:inherit;background:#fff}
+.tc-tab td.tc-sim{background:#dff5fd;font-weight:700;color:var(--tinta)}
+.tc-tab td.tc-pref{font-weight:700;white-space:nowrap}
+.tc-tab td.tc-emp{font-weight:400;color:var(--suave)}
+.tc-bts{display:flex;flex-wrap:wrap;gap:8px}
+#tc-res tbody th{min-width:13em}
+#tc-grade table{width:auto;min-width:min(100%,320px)}
+.tc-tab td small{display:block;font-weight:400;font-size:.74rem;color:var(--suave)}
+.campo select{width:100%;min-width:0;text-overflow:ellipsis}
+.campo{min-width:0}
