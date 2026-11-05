@@ -593,3 +593,6 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .idioma{align-self:center;flex:none;font:700 .78rem var(--sans);letter-spacing:.06em;color:var(--noite);text-decoration:none;border:1.5px solid var(--linha);background:var(--cartao);border-radius:99px;padding:6px 11px;margin-right:8px}
 .idioma:hover{background:var(--areia);color:var(--noite)}
 @media (max-width:1080px){.idioma{margin-left:auto}.idioma~.bbusca{margin-left:0}}
+
+/* bloco de destaque logo depois de outra seção: sem somar dois espaçamentos */
+.secao+.secao:has(> .cta:only-child){padding-top:0}
