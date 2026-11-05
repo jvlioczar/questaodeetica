@@ -596,3 +596,10 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 
 /* bloco de destaque logo depois de outra seção: sem somar dois espaçamentos */
 .secao+.secao:has(> .cta:only-child){padding-top:0}
+
+/* hero: ilustração maior, apoiada no pé do hero (os braços saem pela borda de baixo) */
+.hero-in{padding-bottom:0}
+.hero-in>div:first-child{padding-bottom:clamp(28px,4vw,48px)}
+.hero-arte{max-width:430px;align-self:end;justify-self:end;margin-bottom:-1px}
+.hero-arte svg{display:block}
+@media (max-width:860px){.hero-in>div:first-child{padding-bottom:0}.hero-arte{order:1;max-width:240px;justify-self:center;margin-top:4px}}
