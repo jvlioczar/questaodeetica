@@ -1,0 +1,82 @@
+/* Questão de Ética: movimento (editado à mão). Carregado depois de style.css. Transições curtas, tudo desligado em
+   prefers-reduced-motion. */
+:root{--mov:cubic-bezier(.22,.7,.2,1)}
+
+/* troca de página suave (Chrome e Edge) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-sai .24s var(--mov) both}
+::view-transition-new(root){animation:vt-entra .4s var(--mov) both}
+@keyframes vt-sai{to{opacity:0;transform:translateY(-6px)}}
+@keyframes vt-entra{from{opacity:0;transform:translateY(12px)}}
+.topo{view-transition-name:topo}
+
+/* topo ganha sombra ao rolar */
+.topo{transition:box-shadow .3s}
+body.rolado .topo{box-shadow:0 8px 28px #0b0a6b26}
+
+/* menus, pop-ups e busca */
+.mega:not([hidden]),.pop:not([hidden]),.busca-in{animation:cai .22s var(--mov)}
+@keyframes cai{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+
+/* botões */
+.btn{transition:transform .2s var(--mov),box-shadow .2s,background-color .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 11px 24px #3b4fd644}
+.btn.alt:hover{box-shadow:inset 0 0 0 1.5px var(--ceu)}
+.btn:active{transform:none}
+.chip{transition:background-color .2s,color .2s,box-shadow .2s}
+
+/* capa */
+.hero .kicker,.hero h1{animation:sobe .7s var(--mov) both}
+.hero .sub{animation:sobe .7s .08s var(--mov) both}
+.hero .lead,.hero .acoes,.hero .numeros{animation:sobe .7s .16s var(--mov) both}
+.hero-arte{animation:sobe .9s .1s var(--mov) both}
+@keyframes sobe{from{opacity:0;transform:translateY(18px)}}
+.grifo{background-size:0 .18em;animation:grifa .9s .55s var(--mov) forwards}
+@keyframes grifa{to{background-size:100% .18em}}
+.hero-arte svg{overflow:visible}
+.hero-arte .raios{transform-origin:212px 214px;animation:gira 120s linear infinite}
+.hero-arte .pata{animation:pata 5s ease-in-out infinite}
+.hero-arte .mao{animation:mao 5s ease-in-out infinite}
+.hero-arte .tracos{animation:pisca 5s ease-in-out infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes pata{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(5px,-2px)}}
+@keyframes mao{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(-5px,-2px)}}
+@keyframes pisca{0%,38%,62%,100%{opacity:.3}50%{opacity:1}}
+
+/* ícone dos cartões reage ao passar o mouse */
+.ccard .ic,.cartao .ic,.vcard .ic{transition:transform .4s var(--mov)}
+.ccard:hover .ic,.cartao:hover .ic,.vcard:hover .ic{transform:rotate(-6deg) scale(1.06)}
+
+/* entrada ao rolar: a classe .rv só é posta pelo JS; sem JS tudo aparece */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s var(--mov),transform .6s var(--mov),box-shadow .2s;transition-delay:calc(var(--i,0) * 50ms)}
+.rv.in{opacity:1;transform:none}
+.rv.in:hover{transition-delay:0s}
+.ccard.rv.in:hover,.cartao.rv.in:hover,.vcard.rv.in:hover{transform:translateY(-3px)}
+.ccard.entra{animation:surge .4s var(--mov) both;animation-delay:calc(var(--i,0) * 28ms)}
+@keyframes surge{from{opacity:0;transform:translateY(14px)}}
+
+/* barra de progresso de leitura */
+.progresso{position:fixed;left:0;right:0;top:0;height:3px;z-index:90;pointer-events:none}
+.progresso i{display:block;height:100%;background:var(--gC);transform-origin:0 50%;transform:scaleX(0)}
+
+/* página de texto */
+.cap-ic,.cap-cab .kicker,.cap-cab h1{animation:sobe .6s var(--mov) both}
+.cap-cab .meta{animation:sobe .6s .1s var(--mov) both}
+.toc{animation:sobe .6s .15s var(--mov) both}
+[role=tabpanel]:not([hidden]),.fb:not([hidden]){animation:abre .3s var(--mov)}
+.kart[open]>*:not(summary),.gaveta[open]>*:not(summary){animation:abre .3s var(--mov)}
+@keyframes abre{from{opacity:0;transform:translateY(-5px)}}
+.op{transition:box-shadow .2s,background-color .2s,transform .2s var(--mov)}
+.op:hover{transform:translateX(3px)}
+.op.certa{animation:pulo .4s var(--mov)}
+.op.errada{animation:treme .35s}
+@keyframes pulo{50%{transform:scale(1.015)}}
+@keyframes treme{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.original a:not(.cit):not(.int){text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .25s}
+.original a:not(.cit):not(.int):hover{background-size:100% 2px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}.grifo{background-size:100% .18em}
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+}
