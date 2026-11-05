@@ -551,7 +551,7 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 @media (max-width:640px){.jor-resumo{grid-template-columns:1fr 1fr}.jor-vol{grid-template-columns:30px 1fr 50px}.jor-vol .jb{grid-column:1/-1;grid-row:2}}
 /* impressão */
 @media print{
-  .acoes-cap,.sel-barra,.janela,.nao-imprime,.migalhas,.chips{display:none!important}
+  .acoes-cap,.sel-barra,.janela,.nao-imprime,.migalhas,.chips,.simples-cta{display:none!important}
   .gavetas{display:block!important}
   mark.dest{background:none;border-bottom:1px solid #999}
   body{background:#fff}.tempos>li,.caixa,.gabarito{box-shadow:none;border:1px solid #ccc}
