@@ -9,6 +9,9 @@
 @keyframes vt-sai{to{opacity:0;transform:translateY(-6px)}}
 @keyframes vt-entra{from{opacity:0;transform:translateY(12px)}}
 .topo{view-transition-name:topo}
+/* a barra da BiblioVerse fica parada na troca de página */
+#bvbar,.bvbar{view-transition-name:bvbar}
+::view-transition-group(bvbar),::view-transition-old(bvbar),::view-transition-new(bvbar){animation:none}
 
 /* topo ganha sombra ao rolar */
 .topo{transition:box-shadow .3s}

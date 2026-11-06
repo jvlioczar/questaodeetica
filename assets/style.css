@@ -44,7 +44,8 @@ p{margin:.6em 0 .9em}
 .cab-sec h2{margin:.1em 0 .3em}
 
 /* topo branco; a marca fica num bloco marinho com o canto arredondado, como nos projetos-irmãos */
-.topo{--hg:clamp(8px,1.6vw,20px);background:var(--noite);box-shadow:0 8px 24px #0b0a6b2e;position:sticky;top:0;z-index:40;margin:0 var(--hg);border-radius:0 0 26px 26px}
+.topo{--hg:clamp(8px,1.6vw,20px);background:var(--noite);box-shadow:0 8px 24px #0b0a6b2e;position:sticky;top:0;z-index:40;margin:0 auto;width:min(calc(100% - 2 * var(--hg)),1332px);border-radius:0 0 26px 26px}
+/* 1332px = conteúdo (1180px, com 24px de respiro de cada lado) + 76px: o logo fica a 100px da borda esquerda e a busca termina a 100px da direita */
 .topo-in{display:flex;align-items:stretch;gap:18px;min-height:66px}
 .marca{display:flex;align-items:center;gap:6px;color:#fff;text-decoration:none;padding:8px 14px 8px 0;font:600 1.05rem/1.04 var(--serif);font-variation-settings:'SOFT' 100}
 .marca:hover{color:#fff}
@@ -623,3 +624,6 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .tc-tab td small{display:block;font-weight:400;font-size:.74rem;color:var(--suave)}
 .campo select{width:100%;min-width:0;text-overflow:ellipsis}
 .campo{min-width:0}
+
+/* página de volume: respiro entre a lista de capítulos e os blocos de referências e teste */
+.caps+.grade2,.caps+.caixa{margin-top:28px}
