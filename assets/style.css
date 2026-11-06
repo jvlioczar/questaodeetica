@@ -621,3 +621,16 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .tc-tab td small{display:block;font-weight:400;font-size:.74rem;color:var(--suave)}
 .campo select{width:100%;min-width:0;text-overflow:ellipsis}
 .campo{min-width:0}
+
+/* alerta sobre argumentos indiretos (camada de estudo) */
+.indireto{background:#fff7ef;border-radius:18px;padding:16px 20px;margin:0 0 22px;box-shadow:inset 0 0 0 1.5px #f6d3b8}
+.indireto p{margin:.35em 0}
+.ind-t{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font:600 1.05rem var(--serif);color:var(--tinta);margin:0 0 6px!important}
+.ind-t small{font:500 .74rem var(--sans);color:var(--suave)}
+.ind-ic{flex:none;width:26px;height:26px;border-radius:50%;background:#e2603f;color:#fff;display:grid;place-items:center;font:700 .95rem var(--sans)}
+.ind-arg{font-family:var(--serif);font-style:italic;font-size:1.08rem;color:var(--tinta)}
+.ind-lista{margin:.4em 0}
+.ind-lista dt{font-family:var(--serif);font-style:italic;color:var(--tinta);margin-top:.7em}
+.ind-lista dd{margin:.15em 0 0}
+body.foco .indireto{display:none}
+@media print{.indireto{display:none!important}}
