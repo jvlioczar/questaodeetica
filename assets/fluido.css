@@ -39,8 +39,8 @@ body.rolado .topo{box-shadow:0 8px 28px #0b0a6b26}
 .hero-arte .mao{animation:mao 5s ease-in-out infinite}
 .hero-arte .tracos{animation:pisca 5s ease-in-out infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
-@keyframes pata{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(5px,-2px)}}
-@keyframes mao{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(-5px,-2px)}}
+@keyframes pata{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(-5px,-2px)}}
+@keyframes mao{0%,100%{transform:translate(0,0)}45%,55%{transform:translate(5px,-2px)}}
 @keyframes pisca{0%,38%,62%,100%{opacity:.3}50%{opacity:1}}
 
 /* ícone dos cartões reage ao passar o mouse */
