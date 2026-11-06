@@ -29,7 +29,7 @@ main>:last-child.secao,main>:last-child .secao:last-child,main>.secao:last-child
 .area{background:var(--areia)}
 .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:56px;background:var(--cartao);padding:8px 12px;z-index:60}
 :focus-visible{outline:3px solid var(--noite2);outline-offset:2px;border-radius:4px}
-.rodape :focus-visible,.marca:focus-visible,.cta :focus-visible,.sel-barra :focus-visible,.sim-fala :focus-visible{outline-color:#fff}
+.rodape :focus-visible,.topo-in>:focus-visible,.menu>a:focus-visible,.drop>button:focus-visible,.marca:focus-visible,.cta :focus-visible,.sel-barra :focus-visible,.sim-fala :focus-visible{outline-color:#fff}
 h1,h2,h3,h4{font-family:var(--serif);font-weight:600;color:var(--tinta);line-height:1.14;letter-spacing:-.012em;margin:1.3em 0 .5em;text-wrap:balance;font-variation-settings:'SOFT' 100}
 h1{font-size:clamp(2.1rem,4.6vw,3.3rem);margin-top:.15em}
 h2{font-size:clamp(1.45rem,2.6vw,2rem)}
@@ -44,29 +44,31 @@ p{margin:.6em 0 .9em}
 .cab-sec h2{margin:.1em 0 .3em}
 
 /* topo branco; a marca fica num bloco marinho com o canto arredondado, como nos projetos-irmãos */
-.topo{background:var(--cartao);box-shadow:0 2px 14px #0b0a6b14;position:sticky;top:0;z-index:40}
+.topo{--hg:clamp(8px,1.6vw,20px);background:var(--noite);box-shadow:0 8px 24px #0b0a6b2e;position:sticky;top:0;z-index:40;margin:0 var(--hg);border-radius:0 0 26px 26px}
 .topo-in{display:flex;align-items:stretch;gap:18px;min-height:66px}
-.marca{display:flex;align-items:center;gap:6px;background:var(--noite);color:#fff;text-decoration:none;padding:8px 32px 8px 24px;border-radius:0 0 42px 0;font:600 1.05rem/1.04 var(--serif);margin-left:-24px;font-variation-settings:'SOFT' 100}
+.marca{display:flex;align-items:center;gap:6px;color:#fff;text-decoration:none;padding:8px 14px 8px 0;font:600 1.05rem/1.04 var(--serif);font-variation-settings:'SOFT' 100}
 .marca:hover{color:#fff}
 .marca .logo{flex:none;color:#fff}
-.marca{position:relative}.marca::before{content:'';position:absolute;top:0;bottom:0;right:100%;width:100vw;background:var(--noite)}
-.topo{overflow-x:clip}
 .menu{display:flex;align-items:center;gap:2px;margin-right:auto;font-weight:500;font-size:.95rem}
-.menu>a,.drop>button{color:var(--tinta);text-decoration:none;padding:8px 13px;border-radius:99px;background:none;border:0;font:inherit;cursor:pointer;white-space:nowrap}
-.menu>a:hover,.drop>button:hover,.menu>a[aria-current],.drop.ativo>button{background:var(--areia)}
+.menu>a,.drop>button{color:#fff;text-decoration:none;padding:8px 13px;border-radius:99px;background:none;border:0;font:inherit;cursor:pointer;white-space:nowrap}
+.menu>a:hover,.drop>button:hover,.menu>a[aria-current],.drop.ativo>button{background:#ffffff1f}
 .drop{position:relative}
 .drop>button span{font-size:.7em;opacity:.6}
 .mega{position:absolute;left:0;top:calc(100% + 8px);width:max-content;min-width:240px;max-width:92vw;background:var(--cartao);border-radius:18px;box-shadow:0 22px 50px #0b0a6b2e;padding:12px;display:grid;gap:2px;z-index:50}
 .mega.larga{grid-template-columns:1fr 1fr;gap:2px 16px}
 .mega a{display:block;color:var(--tinta);text-decoration:none;padding:6px 10px;border-radius:10px;font-size:.93rem}
 .mega a:hover,.mega a[aria-current]{background:var(--areia)}
-.bbusca{align-self:center;display:flex;gap:9px;align-items:center;border:1.5px solid var(--linha);background:var(--papel);color:var(--suave);border-radius:99px;padding:7px 14px;font:inherit;font-size:.9rem;cursor:pointer}
-.bbusca kbd{font:600 .7rem var(--sans);background:var(--areia);border-radius:5px;padding:1px 6px}
-.hamb{display:none;align-self:center;background:none;border:0;color:var(--tinta);font-size:1.5rem;cursor:pointer;margin-left:auto}
+.bbusca{align-self:center;display:flex;gap:9px;align-items:center;border:1.5px solid #ffffff40;background:#ffffff14;color:#e3e8ff;border-radius:99px;padding:7px 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.bbusca kbd{font:600 .7rem var(--sans);background:#ffffff26;color:#fff;border-radius:5px;padding:1px 6px}
+.hamb{display:none;align-self:center;background:none;border:0;color:#fff;font-size:1.5rem;cursor:pointer;margin-left:auto}
 @media (max-width:1080px){
   .hamb{display:block}.bbusca kbd,.bbusca .tb{display:none}.bbusca{margin-left:auto}
-  .menu{position:fixed;inset:66px 0 auto 0;background:var(--cartao);flex-direction:column;align-items:stretch;padding:12px 20px 18px;display:none;max-height:calc(100vh - 66px);overflow:auto;box-shadow:0 20px 40px #0b0a6b26;margin:0}
+  .menu{position:absolute;inset:100% 0 auto 0;border-radius:0 0 22px 22px;background:var(--cartao);flex-direction:column;align-items:stretch;padding:12px 20px 18px;display:none;max-height:calc(100vh - 120px);overflow:auto;box-shadow:0 20px 40px #0b0a6b26;margin:0}
   .menu.aberto{display:flex}
+  .menu>a,.drop>button{color:var(--tinta)}
+  .menu>a:hover,.drop>button:hover,.menu>a[aria-current],.drop.ativo>button{background:var(--areia)}
+  .topo:has(.menu.aberto){border-radius:0}
+  .menu>a:focus-visible,.drop>button:focus-visible{outline-color:var(--noite2)}
   .menu>a{text-align:center}
   .drop{display:flex;flex-direction:column}
   .mega,.mega.larga{position:static;box-shadow:none;padding:0 0 6px 14px;min-width:0;grid-template-columns:1fr}
@@ -590,8 +592,8 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .cab+.secao{padding-top:clamp(10px,1.6vw,16px)}
 .cab+.secao>:first-child,.cab+.secao>.estreito:first-child>:first-child,.prosa>h2:first-child,.cab+.secao .caixa:first-child>h2:first-child{margin-top:0}
 /* seletor de idioma no topo */
-.idioma{align-self:center;flex:none;font:700 .78rem var(--sans);letter-spacing:.06em;color:var(--noite);text-decoration:none;border:1.5px solid var(--linha);background:var(--cartao);border-radius:99px;padding:6px 11px;margin-right:8px}
-.idioma:hover{background:var(--areia);color:var(--noite)}
+.idioma{align-self:center;flex:none;font:700 .78rem var(--sans);letter-spacing:.06em;color:#fff;text-decoration:none;border:1.5px solid #ffffff59;background:transparent;border-radius:99px;padding:6px 11px;margin-right:8px}
+.idioma:hover{background:#ffffff1f;color:#fff}
 @media (max-width:1080px){.idioma{margin-left:auto}.idioma~.bbusca{margin-left:0}}
 
 /* bloco de destaque logo depois de outra seção: sem somar dois espaçamentos */
