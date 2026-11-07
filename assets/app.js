@@ -5,15 +5,31 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var base = document.body.getAttribute('data-base') || '';
   /* idioma: português na raiz, inglês em /en/ */
-  var EN = /^en/i.test(document.documentElement.lang);
-  function L(pt, en) { return EN ? en : pt; }
+  var LG = /^es/i.test(document.documentElement.lang) ? 'es' : /^en/i.test(document.documentElement.lang) ? 'en' : 'pt';
+  var EN = LG === 'en', ES = LG === 'es';
+  /* textos da interface: L(português, inglês[, espanhol]); sem o espanhol, usa o dicionário assets/i18n-es.js (chave = texto em inglês) */
+  function L(pt, en, es) { return LG === 'pt' ? pt : LG === 'en' ? en : (es !== undefined ? es : ((window.QE_ES || {})[en] || en)); }
+  /* páginas montadas no JavaScript: nome lógico (português) -> nome real no idioma da página */
+  var PG = {
+    en: { 'pensadores.html': 'who-is-who.html', 'glossario.html': 'glossary.html', 'minha-jornada.html': 'my-journey.html', 'trilhas.html': 'reading-paths.html',
+      'cartoes.html': 'flashcards.html', 'testes.html': 'quizzes.html', 'teorias.html': 'theory-comparator.html', 'referencias.html': 'references.html',
+      'professores.html': 'teachers.html', 'simulador.html': 'debate-simulator.html', 'mapa-argumentos.html': 'argument-map.html',
+      'desbancando.html': 'debunking-objections.html', 'ferramentas.html': 'tools.html' },
+    es: { 'pensadores.html': 'quien-es-quien.html', 'glossario.html': 'glosario.html', 'minha-jornada.html': 'mi-recorrido.html', 'trilhas.html': 'rutas-de-lectura.html',
+      'cartoes.html': 'fichas.html', 'testes.html': 'pruebas.html', 'teorias.html': 'comparador-de-teorias.html', 'referencias.html': 'referencias.html',
+      'professores.html': 'area-docente.html', 'simulador.html': 'simulador-de-debate.html', 'mapa-argumentos.html': 'mapa-de-argumentos.html',
+      'desbancando.html': 'desmontando-objeciones.html', 'ferramentas.html': 'herramientas.html' }
+  };
+  function pg(n) { return (PG[LG] || {})[n] || n; }
+  window.qePg = pg;
+  var SIMPLES = { pt: 'simples', en: 'simplified', es: 'simplificada' }[LG];
   var assets = document.body.getAttribute('data-assets') || (base + 'assets/');
   var ls = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function fmt(n) { return Math.round(n).toLocaleString(EN ? 'en-US' : 'pt-BR'); }
+  function fmt(n) { return Math.round(n).toLocaleString({ pt: 'pt-BR', en: 'en-US', es: 'es-ES' }[LG]); }
   function dec(s) { return EN ? s : s.replace('.', ','); }
   function num(n, d) { return dec(n.toFixed(d === undefined ? 1 : d)); }
   /* gráfico de barras simples: linhas = [[rótulo, valor, texto, classe]] */
@@ -166,10 +182,10 @@
         else location.href = a.getAttribute('href');
       } else if (a.matches('button.pens')) {
         var p = (dados.p || {})[a.dataset.p];
-        if (p) mostra(a, '<p class="ptipo">' + L('Quem é', 'Who is') + '</p><p class="pt">' + esc(p[0]) + '</p><p class="fino">' + esc(p[1]) + '</p><p>' + esc(p[2]) + '</p><p class="fino"><a href="' + base + 'pensadores.html#' + a.dataset.p + '">' + L('Mais em Quem é quem', 'More in Who’s who') + '</a> · ' + L('contexto escrito para este site', 'context written for this site') + '</p>');
+        if (p) mostra(a, '<p class="ptipo">' + L('Quem é', 'Who is') + '</p><p class="pt">' + esc(p[0]) + '</p><p class="fino">' + esc(p[1]) + '</p><p>' + esc(p[2]) + '</p><p class="fino"><a href="' + base + pg('pensadores.html') + '#' + a.dataset.p + '">' + L('Mais em Quem é quem', 'More in Who’s who') + '</a> · ' + L('contexto escrito para este site', 'context written for this site') + '</p>');
       } else {
         var g = (dados.g || {})[a.dataset.g];
-        if (g) mostra(a, '<p class="ptipo">' + L('Glossário', 'Glossary') + '</p><p class="pt">' + esc(g[0]) + '</p><p>' + esc(g[1]) + '</p><p class="fino"><a href="' + base + 'glossario.html#' + a.dataset.g + '">' + L('Ver no glossário', 'See in the glossary') + '</a></p>');
+        if (g) mostra(a, '<p class="ptipo">' + L('Glossário', 'Glossary') + '</p><p class="pt">' + esc(g[0]) + '</p><p>' + esc(g[1]) + '</p><p class="fino"><a href="' + base + pg('glossario.html') + '#' + a.dataset.g + '">' + L('Ver no glossário', 'See in the glossary') + '</a></p>');
       }
       return;
     }
@@ -182,7 +198,7 @@
   function norm(s) { return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function abreBusca() {
     if (!bx) return; bx.hidden = false; bq.value = ''; br.innerHTML = ''; bq.focus();
-    if (!idx) fetch(assets + (EN ? 'busca_en.json' : 'busca.json')).then(function (r) { return r.json(); }).then(function (j) { idx = j.map(function (x) { x.n = norm(x.t + ' ' + (x.s || []).join(' ')); x.nt = norm(x.t); return x; }); if (bq && bq.value) bq.dispatchEvent(new Event('input')); });
+    if (!idx) fetch(assets + (LG === 'pt' ? 'busca.json' : 'busca_' + LG + '.json')).then(function (r) { return r.json(); }).then(function (j) { idx = j.map(function (x) { x.n = norm(x.t + ' ' + (x.s || []).join(' ')); x.nt = norm(x.t); return x; }); if (bq && bq.value) bq.dispatchEvent(new Event('input')); });
   }
   function fechaBusca() { if (bx && !bx.hidden) bx.hidden = true; }
   $$('.bbusca').forEach(function (b) { b.addEventListener('click', abreBusca); });
@@ -333,9 +349,9 @@
       var n = Object.keys(resp).length, nao = Object.keys(resp).filter(function (k) { return resp[k] === 'n'; }).length;
       var nome = prat.value === 'outra' ? (outra.value || L('essa prática', 'this practice')) : prat.value.toLowerCase();
       var out = $('#esp-res');
-      if (n < 4) { out.textContent = L('Responda às quatro perguntas (' + n + ' de 4).', 'Answer all four questions (' + n + ' of 4).'); out.className = 'fb'; return; }
-      if (nao === 0) { out.className = 'fb ok'; out.innerHTML = L('<strong>Pelas suas respostas, sua atitude sobre “' + esc(nome) + '” não depende da espécie dos afetados.</strong> Vale conferir se você aceitaria mesmo cada prejuízo envolvido, como pede a quarta pergunta.', '<strong>Based on your answers, your attitude toward “' + esc(nome) + '” does not depend on the species of those affected.</strong> It’s worth checking whether you would really accept each harm involved, as the fourth question asks.'); }
-      else { out.className = 'fb no'; out.innerHTML = L('<strong>Em ' + nao + ' de 4 perguntas a sua decisão sobre “' + esc(nome) + '” mudaria se mudasse a espécie dos afetados ou a sua posição.</strong> Segundo o Volume II, isso indica uma atitude especista: o peso dado aos prejuízos depende de quem os sofre, e não do tamanho deles.', '<strong>In ' + nao + ' of 4 questions, your decision about “' + esc(nome) + '” would change if the species of those affected, or your own position, changed.</strong> According to Volume II, this points to a speciesist attitude: the weight given to harms depends on who suffers them, not on how great they are.'); }
+      if (n < 4) { out.textContent = L('Responda às quatro perguntas (' + n + ' de 4).', 'Answer all four questions (' + n + ' of 4).', 'Responde las cuatro preguntas (' + n + ' de 4).'); out.className = 'fb'; return; }
+      if (nao === 0) { out.className = 'fb ok'; out.innerHTML = L('<strong>Pelas suas respostas, sua atitude sobre “' + esc(nome) + '” não depende da espécie dos afetados.</strong> Vale conferir se você aceitaria mesmo cada prejuízo envolvido, como pede a quarta pergunta.', '<strong>Based on your answers, your attitude toward “' + esc(nome) + '” does not depend on the species of those affected.</strong> It’s worth checking whether you would really accept each harm involved, as the fourth question asks.', '<strong>Según tus respuestas, tu actitud sobre “' + esc(nome) + '” no depende de la especie de los afectados.</strong> Vale la pena verificar si de verdad aceptarías cada perjuicio involucrado, como pide la cuarta pregunta.'); }
+      else { out.className = 'fb no'; out.innerHTML = L('<strong>Em ' + nao + ' de 4 perguntas a sua decisão sobre “' + esc(nome) + '” mudaria se mudasse a espécie dos afetados ou a sua posição.</strong> Segundo o Volume II, isso indica uma atitude especista: o peso dado aos prejuízos depende de quem os sofre, e não do tamanho deles.', '<strong>In ' + nao + ' of 4 questions, your decision about “' + esc(nome) + '” would change if the species of those affected, or your own position, changed.</strong> According to Volume II, this points to a speciesist attitude: the weight given to harms depends on who suffers them, not on how great they are.', '<strong>En ' + nao + ' de 4 preguntas, tu decisión sobre “' + esc(nome) + '” cambiaría si cambiara la especie de los afectados o tu propia posición.</strong> Según el Volumen II, esto indica una actitud especista: el peso que se da a los perjuicios depende de quién los sufre, y no de su magnitud.'); }
     };
     $$('.sn button', F).forEach(function (b) { b.addEventListener('click', function () { resp[b.dataset.i] = b.dataset.r; $$('.sn button[data-i="' + b.dataset.i + '"]', F).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); calc(); }); });
     if (outra) outra.addEventListener('input', calc);
@@ -349,8 +365,10 @@
     barras(-1);
     $('#lot-sortear').addEventListener('click', function () {
       var r = Math.random() * tot, i = 0; while (r > LOT[i][1]) { r -= LOT[i][1]; i++; }
-      var p = 100 * LOT[i][1] / tot, pc_ = p < 1 ? p.toFixed(2) : p.toFixed(1), mam = dec((100 * LOT[LOT.length - 1][1] / tot).toFixed(2));
-      $('#lot-res').innerHTML = EN
+      var p = 100 * LOT[i][1] / tot, pc_ = dec(p < 1 ? p.toFixed(2) : p.toFixed(1)), mam = dec((100 * LOT[LOT.length - 1][1] / tot).toFixed(2));
+      $('#lot-res').innerHTML = ES
+        ? '<strong>Naciste como: ' + esc(LOT[i][0].toLowerCase()) + '.</strong> Probabilidad: ' + pc_ + '%. Muertos por año: ' + esc(LOT[i][2]) + '. La probabilidad de nacer mamífero o ave, los animales en los que más se piensa, es del ' + mam + '%.'
+        : EN
         ? '<strong>You were born as: ' + esc(LOT[i][0].toLowerCase()) + '.</strong> Chance: ' + pc_ + '%. Killed per year: ' + esc(LOT[i][2]) + '. The chance of being born a mammal or a bird, the animals people think of most, is ' + mam + '%.'
         : '<strong>Você nasceu como: ' + esc(LOT[i][0].toLowerCase()) + '.</strong> Chance: ' + pc_ + '%. São mortos por ano ' + esc(LOT[i][2]) + '. A chance de nascer mamífero ou ave, os animais mais lembrados, é de ' + mam + '%.';
       barras(i);
@@ -364,7 +382,7 @@
     zoom.innerHTML = niveis.map(function (n) { return '<div class="zl"><span>' + n[0] + '</span><span class="zb"><i></i></span><b></b></div>'; }).join('');
     var upd = function () {
       var q = parseInt(s.value, 10), selv = q * 1e18, exp = 434e9, seg = 365 * 24 * 3600 * exp / (selv + exp);
-      $('#ano-v').textContent = q + L(q === 1 ? ' quintilhão' : ' quintilhões', ' quintillion');
+      $('#ano-v').textContent = q + L(q === 1 ? ' quintilhão' : ' quintilhões', ' quintillion', q === 1 ? ' trillón' : ' trillones');
       $('#ano-exp').style.width = Math.max(.3, 100 * exp / (selv + exp)) + '%';
       niveis.forEach(function (n, i) {
         var pc = 100 * seg / n[1], z = zoom.children[i];
@@ -375,7 +393,9 @@
       cal.dataset.hora = '';
       $('#ano-txt').dataset.ini = '23:59:' + String(Math.max(0, hh)).padStart(2, '0');
       var dur = seg >= 1 ? dec(seg.toFixed(1)) + L(' segundos', ' seconds') : (seg * 1000).toFixed(0) + L(' milissegundos', ' milliseconds');
-      $('#ano-txt').innerHTML = EN
+      $('#ano-txt').innerHTML = ES
+        ? 'Los animales criados para la explotación ocuparían <strong>' + dur + '</strong> del año: empezarían a aparecer el <strong>31 de diciembre, a las ' + $('#ano-txt').dataset.ini + '</strong>. Todo el resto del año sería de los animales en la naturaleza.'
+        : EN
         ? 'Animals bred for exploitation would take up <strong>' + dur + '</strong> of the year: they would start to appear on <strong>December 31, at ' + $('#ano-txt').dataset.ini + '</strong>. All the rest of the year would belong to animals in the wild.'
         : 'Os animais criados para exploração seriam <strong>' + dur + '</strong> do ano: eles começariam a aparecer em <strong>31 de dezembro, às ' + $('#ano-txt').dataset.ini + '</strong>. Todo o resto do ano seria dos animais na natureza.';
     };
@@ -403,7 +423,9 @@
       $('#dm-qv').textContent = num(q, 2);
       var perd = Math.max(0, v - a), avaq = perd * q, pct = v > 0 ? Math.min(100, 100 * a / v) : 0;
       var vd = $('#dm-vida').children; vd[0].style.width = pct + '%'; vd[1].style.width = (100 - pct) + '%';
-      $('#dm-res').innerHTML = EN
+      $('#dm-res').innerHTML = ES
+        ? 'Años de vida perdidos: <strong>' + num(perd) + '</strong>. AVAC perdidos: <strong>' + num(avaq) + '</strong>. El individuo vivió el ' + num(pct) + '% de la vida que podría haber tenido. Cuanto antes llega la muerte, mayor es la pérdida, aunque sea indolora.'
+        : EN
         ? 'Years of life lost: <strong>' + num(perd) + '</strong>. QALYs lost: <strong>' + num(avaq) + '</strong>. The individual lived ' + num(pct) + '% of the life they could have had. The earlier the death, the greater the loss, even if it is painless.'
         : 'Anos de vida perdidos: <strong>' + num(perd) + '</strong>. AVAQs perdidos: <strong>' + num(avaq) + '</strong>. O indivíduo viveu ' + num(pct) + '% da vida que poderia ter. Quanto mais cedo a morte, maior a perda, mesmo que ela seja indolor.';
     };
@@ -424,7 +446,9 @@
       var gv = L('Gravidade', 'Severity'), bf = L('Benefício', 'Benefit'), ng = L('Negligência', 'Neglect'), mr = L('maior', 'higher');
       grafico($('#pr-graf'), [[gv + ' · A', g1[0], fmt(r[0].grav)], [gv + ' · B', g1[1], fmt(r[1].grav), 'mau'], [bf + ' · A', g2[0], fmt(r[0].bem)], [bf + ' · B', g2[1], fmt(r[1].bem), 'mau'], [ng + ' · A', g3[0], r[0].neg >= r[1].neg ? mr : ''], [ng + ' · B', g3[1], r[1].neg > r[0].neg ? mr : '', 'mau']], 100);
       var mg = r[0].grav >= r[1].grav ? 'A' : 'B', mb = r[0].bem >= r[1].bem ? 'A' : 'B', mn = r[0].neg >= r[1].neg ? 'A' : 'B';
-      o.innerHTML = EN
+      o.innerHTML = ES
+        ? '<strong>Gravedad total</strong> (víctimas × qué tan grave): A = ' + fmt(r[0].grav) + ', B = ' + fmt(r[1].grav) + ' → más grave: ' + mg + '.<br><strong>Beneficio con este recurso</strong> (víctimas ayudadas × mejora): A = ' + fmt(r[0].bem) + ', B = ' + fmt(r[1].bem) + ' → mayor beneficio: ' + mb + '.<br><strong>Desatención</strong>: más desatendido: ' + mn + '. ' + (mg !== mb ? 'Fíjate: el problema más grave no es necesariamente donde el recurso hace más bien. El libro discute cómo sopesar estos criterios.' : '')
+        : EN
         ? '<strong>Total severity</strong> (victims × how bad): A = ' + fmt(r[0].grav) + ', B = ' + fmt(r[1].grav) + ' → more severe: ' + mg + '.<br><strong>Benefit from this resource</strong> (victims helped × improvement): A = ' + fmt(r[0].bem) + ', B = ' + fmt(r[1].bem) + ' → greater benefit: ' + mb + '.<br><strong>Neglect</strong>: more neglected: ' + mn + '. ' + (mg !== mb ? 'Notice: the most severe problem is not necessarily where the resource does the most good. The book discusses how to weigh these criteria.' : '')
         : '<strong>Gravidade total</strong> (vítimas × quão ruim): A = ' + fmt(r[0].grav) + ', B = ' + fmt(r[1].grav) + ' → mais grave: ' + mg + '.<br><strong>Benefício com este recurso</strong> (vítimas ajudadas × melhora): A = ' + fmt(r[0].bem) + ', B = ' + fmt(r[1].bem) + ' → maior benefício: ' + mb + '.<br><strong>Negligência</strong>: mais negligenciado: ' + mn + '. ' + (mg !== mb ? 'Repare: o problema mais grave não é necessariamente onde o recurso faz mais bem. O livro discute como pesar esses critérios.' : '');
     };
@@ -434,7 +458,7 @@
   function sequencia(caixa, cont, itens, monta_) {
     var i = 0, pts = 0;
     var prox = function () {
-      if (i >= itens.length) { caixa.innerHTML = '<p class="placar">' + L('Você acertou ' + pts + ' de ' + itens.length + '.', 'You got ' + pts + ' of ' + itens.length + ' right.') + '</p><p><button type="button" class="btn">' + L('Recomeçar', 'Start over') + '</button></p>'; $('button', caixa).addEventListener('click', function () { i = 0; pts = 0; prox(); }); cont.textContent = ''; return; }
+      if (i >= itens.length) { caixa.innerHTML = '<p class="placar">' + L('Você acertou ' + pts + ' de ' + itens.length + '.', 'You got ' + pts + ' of ' + itens.length + ' right.', 'Acertaste ' + pts + ' de ' + itens.length + '.') + '</p><p><button type="button" class="btn">' + L('Recomeçar', 'Start over') + '</button></p>'; $('button', caixa).addEventListener('click', function () { i = 0; pts = 0; prox(); }); cont.textContent = ''; return; }
       var it = monta_(itens[i]);
       caixa.innerHTML = '<p class="qp">' + esc(it.p) + '</p><ul class="ops">' + it.ops.map(function (o) { return '<li><button type="button" class="op" data-ok="' + (o === it.certa ? 1 : 0) + '">' + esc(o) + '</button></li>'; }).join('') + '</ul><p class="fb" hidden data-expl="' + esc(it.ex) + '"></p><p><button type="button" class="btn alt seg" hidden>' + L('Próxima →', 'Next →') + '</button></p>';
       cont.textContent = (i + 1) + L(' de ', ' of ') + itens.length;
@@ -453,7 +477,7 @@
   }
   if (tipoF === 'vieses') {
     var vz = JSON.parse($('#dados-vieses').textContent);
-    sequencia($('#vz-q'), $('#vz-n'), mistura(vz), function (x) { return { p: x[0], ops: mistura(x[2]), certa: x[1], ex: L('O viés aqui é: ' + x[1] + '. Veja a descrição no Volume X.', 'The bias here is: ' + x[1] + '. See the description in Volume X.') }; });
+    sequencia($('#vz-q'), $('#vz-n'), mistura(vz), function (x) { return { p: x[0], ops: mistura(x[2]), certa: x[1], ex: L('O viés aqui é: ' + x[1] + '. Veja a descrição no Volume X.', 'The bias here is: ' + x[1] + '. See the description in Volume X.', 'El sesgo aquí es: ' + x[1] + '. Mira la descripción en el Volumen X.') }; });
   }
 
   if (tipoF === 'riscos') {
@@ -474,22 +498,36 @@
   }
 
   if (tipoF === 'veu') {
-    $$('[data-veu]', F).forEach(function (b) {
+    /* véu da imparcialidade: cenários em #dados-veu (tools/veu.py); sorteio pelo peso p de cada posição */
+    var DV = JSON.parse($('#dados-veu').textContent), cen = null;
+    var bReg = $$('[data-veu]', F), oV = $('#veu-res');
+    var mostraCen = function (s) {
+      cen = DV.c.filter(function (c) { return c.s === s; })[0];
+      $$('[data-cen]', F).forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.cen === s)); });
+      $('#veu-i').textContent = cen.i;
+      var iguais = cen.pos.every(function (x) { return x.p === 1; });
+      $('#veu-s').textContent = iguais ? DV.simples : '';
+      $('#veu-s').hidden = !iguais;
+      bReg.forEach(function (b, k) { b.textContent = cen.r[k]; b.setAttribute('aria-pressed', 'false'); });
+      oV.innerHTML = ''; oV.className = 'fb';
+    };
+    $$('[data-cen]', F).forEach(function (b) { b.addEventListener('click', function () { mostraCen(b.dataset.cen); }); });
+    bReg.forEach(function (b) {
       b.addEventListener('click', function () {
-        $$('[data-veu]', F).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-        var hum = 8e9, ani = 434e9, r = Math.random() * (hum + ani), humano = r < hum, regra = b.dataset.veu;
-        var tipo_ = humano ? L('um humano', 'a human') : (r - hum < 24e9 ? L('um vertebrado terrestre criado para consumo', 'a land vertebrate raised for food') : (r - hum < 204e9 ? L('um peixe criado em fazenda', 'a farmed fish') : L('um camarão criado em fazenda', 'a farmed shrimp')));
-        var o = $('#veu-res');
-        var chance = num(100 * ani / (hum + ani));
-        if (EN) {
-          if (humano) o.innerHTML = '<strong>You were born ' + tipo_ + '.</strong> ' + (regra === 'manter' ? 'You were lucky: under the rule you chose, the chance of being born as an exploited animal was ' + chance + '%.' : 'Under the rule you chose, you give up some products, but no being is born to be exploited.');
-          else o.innerHTML = '<strong>You were born ' + tipo_ + '.</strong> ' + (regra === 'manter' ? 'Under the rule you chose, your life will be short and spent in confinement until slaughter. Would you choose this rule again?' : 'Under the rule you chose, you would not have been bred to be exploited.') + ' The chance of ending up here was ' + chance + '%.';
-        }
-        else if (humano) o.innerHTML = '<strong>Você nasceu ' + tipo_ + '.</strong> ' + (regra === 'manter' ? 'Teve sorte: com a regra que escolheu, a chance de nascer como um animal explorado era de ' + chance + '%.' : 'Com a regra que escolheu, você abre mão de alguns produtos, mas nenhum ser nasce para ser explorado.');
-        else o.innerHTML = '<strong>Você nasceu ' + tipo_ + '.</strong> ' + (regra === 'manter' ? 'Com a regra que escolheu, a sua vida será curta e passada em confinamento, até o abate. Você escolheria essa regra de novo?' : 'Com a regra que escolheu, você não teria sido criado para ser explorado.') + ' A chance de cair aqui era de ' + chance + '%.';
-        o.className = 'fb ' + (regra === 'abolir' ? 'ok' : 'no');
+        if (!cen) return;
+        bReg.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        var k = +b.dataset.veu, tot = cen.pos.reduce(function (a, x) { return a + x.p; }, 0), r = Math.random() * tot, pos = cen.pos[cen.pos.length - 1];
+        for (var i = 0, ac = 0; i < cen.pos.length; i++) { ac += cen.pos[i].p; if (r < ac) { pos = cen.pos[i]; break; } }
+        var ruim = k === 0 && pos !== cen.pos[0];
+        var h = '<strong>' + L('Você nasceu como ', 'You were born as ', 'Naciste como ') + esc(pos.n) + '.</strong> ' + esc(k === 0 ? pos.a : pos.b);
+        if (ruim) h += ' ' + L('Você escolheria essa regra de novo?', 'Would you choose this rule again?', '¿Volverías a elegir esta regla?');
+        h += ' <span class="fino">' + L('A chance de cair nesta posição era de ', 'The chance of ending up in this position was ', 'La probabilidad de caer en esta posición era del ') + num(100 * pos.p / tot) + '%.</span>';
+        if (cen.nota) h += '<p class="veu-nota"><strong>' + L('E os animais?', 'And animals?', '¿Y los animales?') + '</strong> ' + esc(cen.nota) + '</p>';
+        oV.innerHTML = h;
+        oV.className = 'fb ' + (k === 1 ? 'ok' : 'no');
       });
     });
+    mostraCen(DV.c[0].s);
   }
 
   /* ---------- calculadora das teorias (Vol. XI, cap. 3) ---------- */
@@ -571,7 +609,7 @@
       var ks = Object.keys(por).sort();
       $('#tc-resumo').innerHTML = ks.length > 1
         ? L('<strong>As teorias se dividem.</strong> ', '<strong>The theories disagree.</strong> ') + ks.map(function (k) { return k + ': ' + esc(por[k].join(', ')); }).join('. ') + '.'
-        : ks.length === 1 ? L('<strong>Todas as que têm preferência escolhem ' + ks[0] + '.</strong>', '<strong>Every theory with a preference chooses ' + ks[0] + '.</strong>') : L('Todas as teorias empatam.', 'All theories tie.');
+        : ks.length === 1 ? L('<strong>Todas as que têm preferência escolhem ' + ks[0] + '.</strong>', '<strong>Every theory with a preference chooses ' + ks[0] + '.</strong>', '<strong>Todas las que tienen preferencia eligen ' + ks[0] + '.</strong>') : L('Todas as teorias empatam.', 'All theories tie.');
     };
     sel.addEventListener('change', function () { carrega(+sel.value); });
     $('#tc-mi').addEventListener('click', function () { dados.forEach(function (l) { l.push(0); }); monta(); });

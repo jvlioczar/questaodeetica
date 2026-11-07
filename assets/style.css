@@ -593,9 +593,11 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .cab+.secao{padding-top:clamp(10px,1.6vw,16px)}
 .cab+.secao>:first-child,.cab+.secao>.estreito:first-child>:first-child,.prosa>h2:first-child,.cab+.secao .caixa:first-child>h2:first-child{margin-top:0}
 /* seletor de idioma no topo */
-.idioma{align-self:center;flex:none;font:700 .78rem var(--sans);letter-spacing:.06em;color:#fff;text-decoration:none;border:1.5px solid #ffffff59;background:transparent;border-radius:99px;padding:6px 11px;margin-right:8px}
+.idiomas{align-self:center;flex:none;display:flex;gap:6px;margin-right:8px}
+.idioma{flex:none;font:700 .78rem var(--sans);letter-spacing:.06em;color:#fff;text-decoration:none;border:1.5px solid #ffffff59;background:transparent;border-radius:99px;padding:6px 11px}
 .idioma:hover{background:#ffffff1f;color:#fff}
-@media (max-width:1080px){.idioma{margin-left:auto}.idioma~.bbusca{margin-left:0}}
+@media (max-width:1080px){.idiomas{margin-left:auto}.idiomas~.bbusca{margin-left:0}}
+@media (max-width:420px){.idiomas{gap:4px}.idioma{padding:5px 8px;font-size:.72rem}}
 
 /* bloco de destaque logo depois de outra seção: sem somar dois espaçamentos */
 .secao+.secao:has(> .cta:only-child){padding-top:0}
@@ -627,3 +629,10 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 
 /* página de volume: respiro entre a lista de capítulos e os blocos de referências e teste */
 .caps+.grade2,.caps+.caixa{margin-top:28px}
+
+/* véu da imparcialidade: grupos de cenários */
+.veu-g{font:700 .74rem var(--sans);text-transform:uppercase;letter-spacing:.05em;color:var(--suave);margin:14px 0 6px}
+.veu-cens{margin-bottom:4px}
+.veu-caso{margin-top:16px;padding-top:12px;border-top:1px solid var(--linha)}
+.veu-caso .sn .btn{text-align:left}
+.veu-nota{margin:.7em 0 0;padding-top:.6em;border-top:1px solid #0b0a6b26}

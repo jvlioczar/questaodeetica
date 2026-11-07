@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Sitemap: https://questaodeetica.biblioverse.org/sitemap.xml
 Sitemap: https://questaodeetica.biblioverse.org/en/sitemap.xml
+Sitemap: https://questaodeetica.biblioverse.org/es/sitemap.xml

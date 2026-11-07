@@ -7,8 +7,12 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var BASE = document.body.dataset.base || '';
   /* idioma: português na raiz, inglês em /en/ */
-  var EN = /^en/i.test(document.documentElement.lang);
-  function L(pt, en) { return EN ? en : pt; }
+  var LG = /^es/i.test(document.documentElement.lang) ? 'es' : /^en/i.test(document.documentElement.lang) ? 'en' : 'pt';
+  var EN = LG === 'en', ES = LG === 'es';
+  /* textos da interface: L(português, inglês[, espanhol]); sem o espanhol, usa o dicionário assets/i18n-es.js (chave = texto em inglês) */
+  function L(pt, en, es) { return LG === 'pt' ? pt : LG === 'en' ? en : (es !== undefined ? es : ((window.QE_ES || {})[en] || en)); }
+  var pg = window.qePg || function (n) { return n; };
+  var SIMPLES = { pt: 'simples', en: 'simplified', es: 'simplificada' }[LG];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function dados(id) { var el = document.getElementById(id); return el ? JSON.parse(el.textContent) : null; }
   var ls = {
@@ -58,14 +62,15 @@
     /* ----- como citar ----- */
     var MES = ['jan.', 'fev.', 'mar.', 'abr.', 'maio', 'jun.', 'jul.', 'ago.', 'set.', 'out.', 'nov.', 'dez.'];
     var MES_EN = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+    var MES_ES = ['ene.', 'feb.', 'mar.', 'abr.', 'may.', 'jun.', 'jul.', 'ago.', 'sept.', 'oct.', 'nov.', 'dic.'];
     $('[data-acao="citar"]', acoes).addEventListener('click', function () {
-      var d = new Date(), hoje = EN ? d.getDate() + ' ' + MES_EN[d.getMonth()] + ' ' + d.getFullYear() : d.getDate() + ' ' + MES[d.getMonth()] + ' ' + d.getFullYear();
+      var d = new Date(), hoje = ES ? d.getDate() + ' ' + MES_ES[d.getMonth()] + ' ' + d.getFullYear() : EN ? d.getDate() + ' ' + MES_EN[d.getMonth()] + ' ' + d.getFullYear() : d.getDate() + ' ' + MES[d.getMonth()] + ' ' + d.getFullYear();
       var abnt = acoes.dataset.abnt ? acoes.dataset.abnt.replace('{ACESSO}', hoje) : '', apa = acoes.dataset.apa;
       var limpo = function (h) { var t = document.createElement('div'); t.innerHTML = h; return t.textContent; };
       var blocoAbnt = abnt ? '<div class="cit-bloco"><p class="cit-ti">' + L('ABNT', 'MLA') + '</p><p class="cit-txt">' + abnt + '</p><button type="button" class="btn alt" data-c="abnt">' + L('Copiar ABNT', 'Copy MLA') + '</button></div>' : '';
       var blocoApa = '<div class="cit-bloco"><p class="cit-ti">APA</p><p class="cit-txt">' + apa + '</p><button type="button" class="btn alt" data-c="apa">' + L('Copiar APA', 'Copy APA') + '</button></div>';
       var c = modal(L('Como citar este texto', 'How to cite this text'), '<p class="fino">' + L('Referência do capítulo, com o link desta página. Confira as normas exigidas pela sua instituição.', 'Reference for this chapter, with the link to this page. Check the style your institution requires.') + '</p>' +
-        (EN ? blocoApa + blocoAbnt : blocoAbnt + blocoApa));
+        (EN || ES ? blocoApa + blocoAbnt : blocoAbnt + blocoApa));
       var bAbnt = $('[data-c="abnt"]', c);
       if (bAbnt) bAbnt.addEventListener('click', function () { copiar(limpo(abnt), this); });
       $('[data-c="apa"]', c).addEventListener('click', function () { copiar(limpo(apa), this); });
@@ -83,7 +88,11 @@
       var vozPt = null;
       var escolheVoz = function () {
         var vs = synth.getVoices(); if (!vs.length) return;
-        var nota = EN ? function (v) {
+        var nota = ES ? function (v) {
+          var l = (v.lang || '').replace('_', '-').toLowerCase(), n = (v.name || '').toLowerCase();
+          if (l.indexOf('es') !== 0) return 0;
+          return (/^es-(419|mx|us|co|ar|cl|pe)/.test(l) ? 20 : l === 'es-es' ? 15 : 10) + (/natural|online|neural/.test(n) ? 4 : 0) + (/google/.test(n) ? 3 : 0) + (/microsoft/.test(n) ? 2 : 0) + (v.localService ? 0 : 1);
+        } : EN ? function (v) {
           var l = (v.lang || '').replace('_', '-').toLowerCase(), n = (v.name || '').toLowerCase();
           if (l.indexOf('en') !== 0) return 0;
           return (l === 'en-us' ? 20 : l === 'en-gb' ? 15 : 10) + (/natural|online|neural/.test(n) ? 4 : 0) + (/google/.test(n) ? 3 : 0) + (/microsoft/.test(n) ? 2 : 0) + (v.localService ? 0 : 1);
@@ -118,7 +127,7 @@
       var fala = function () {
         if (pos >= fila.length) { para(); return; }
         var it = fila[pos], u = new SpeechSynthesisUtterance(it[1]);
-        var v = voz(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = EN ? 'en-US' : 'pt-BR'; u.rate = vel;
+        var v = voz(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = { pt: 'pt-BR', en: 'en-US', es: 'es-419' }[LG]; u.rate = vel;
         u.onend = function () { if (!tocando) return; pos++; fala(); };
         marca(it[0]); synth.speak(u);
       };
@@ -131,7 +140,8 @@
       bOuvir.addEventListener('click', function () {
         if (!tocando && !voz() && !bOuvir.dataset.avisou) {
           bOuvir.dataset.avisou = '1';
-          if (EN) modal('English voice not found', '<p>Your browser or system does not have an English voice installed, so the reading may come out with another language’s accent.</p><p class="fino">On Windows: Settings → Time &amp; language → Speech → Add voices → English (United States). On Android and iPhone, English voices are usually in the accessibility or text-to-speech settings. Chrome and Edge already include English voices on most computers.</p>');
+          if (ES) modal('No se encontró una voz en español', '<p>Tu navegador o sistema no tiene instalada una voz en español, así que la lectura puede salir con el acento de otro idioma.</p><p class="fino">En Windows: Configuración → Hora e idioma → Voz → Agregar voces → Español (México) o Español (España). En Android y iPhone, las voces en español suelen venir instaladas; revisa la configuración de texto a voz del sistema.</p>');
+          else if (EN) modal('English voice not found', '<p>Your browser or system does not have an English voice installed, so the reading may come out with another language’s accent.</p><p class="fino">On Windows: Settings → Time &amp; language → Speech → Add voices → English (United States). On Android and iPhone, English voices are usually in the accessibility or text-to-speech settings. Chrome and Edge already include English voices on most computers.</p>');
           else modal('Voz em português não encontrada', '<p>Seu navegador ou sistema não tem uma voz em português do Brasil instalada, então a leitura pode sair com sotaque de outra língua.</p><p class="fino">No Windows: Configurações → Hora e idioma → Fala → Adicionar vozes → Português (Brasil). No Android e no iPhone, a voz em português costuma vir nas configurações de acessibilidade ou de texto para fala. O Chrome e o Edge já trazem vozes em português na maioria dos computadores.</p>');
         }
         if (tocando) { tocando = false; synth.cancel(); estado(); return; }
@@ -213,7 +223,7 @@
       window.getSelection().removeAllRanges(); barra.hidden = true;
     };
     var editaNota = function (txtInicial, ao) {
-      var c = modal(L('Anotação', 'Note'), '<p class="fino">' + L('A anotação fica salva só neste navegador e aparece em <a href="' + BASE + 'minha-jornada.html">Minha jornada</a>.', 'The note is saved only in this browser and appears in <a href="' + BASE + 'minha-jornada.html">My journey</a>.') + '</p><textarea class="nota-campo" rows="5" placeholder="' + L('O que você pensou sobre este trecho?', 'What did you think about this passage?') + '">' + esc(txtInicial || '') + '</textarea><p><button type="button" class="btn">' + L('Salvar', 'Save') + '</button></p>');
+      var c = modal(L('Anotação', 'Note'), '<p class="fino">' + L('A anotação fica salva só neste navegador e aparece em <a href="' + BASE + pg('minha-jornada.html') + '">Minha jornada</a>.', 'The note is saved only in this browser and appears in <a href="' + BASE + pg('minha-jornada.html') + '">My journey</a>.', 'La nota se guarda solo en este navegador y aparece en <a href="' + BASE + pg('minha-jornada.html') + '">Mi recorrido</a>.') + '</p><textarea class="nota-campo" rows="5" placeholder="' + L('O que você pensou sobre este trecho?', 'What did you think about this passage?') + '">' + esc(txtInicial || '') + '</textarea><p><button type="button" class="btn">' + L('Salvar', 'Save') + '</button></p>');
       var ta = $('textarea', c); ta.focus();
       $('.btn', c).addEventListener('click', function () { ao(ta.value.trim()); dlg.close(); });
     };
@@ -303,17 +313,19 @@
       if (resp.quer === 'entender' && resp.nivel === 'muito') m = 'senciencia';
       var t = tr[m], caps = resp.tempo === 'curto' ? t.caps.slice(0, 1) : resp.tempo === 'tarde' ? t.caps.slice(0, 3) : t.caps;
       var mins = caps.reduce(function (a, c) { return a + c[3]; }, 0);
-      var plano = EN
+      var plano = ES
+        ? (resp.tempo === 'curto' ? 'En 15 minutos, lee la capa “Antes de leer” y el comienzo del texto. Vuelve después para terminarlo.' : resp.tempo === 'tarde' ? 'Una tarde alcanza para estos tres textos. Responde las preguntas de “Practica” al final de cada uno.' : 'Sigue la ruta completa, uno o dos textos por día, y haz la prueba del volumen al final.')
+        : EN
         ? (resp.tempo === 'curto' ? 'In 15 minutes, read the “Before you read” layer and the beginning of the text. Come back later to finish.' : resp.tempo === 'tarde' ? 'An afternoon is enough for these three texts. Do the “Practice” questions at the end of each one.' : 'Follow the whole path, one or two texts a day, and take the volume test at the end.')
         : (resp.tempo === 'curto' ? 'Em 15 minutos, leia a camada “Antes de ler” e o começo do texto. Volte depois para terminar.' : resp.tempo === 'tarde' ? 'Uma tarde dá para estes três textos. Faça as perguntas de “Pratique” ao fim de cada um.' : 'Siga a trilha inteira, um ou dois textos por dia, e faça o teste do volume no fim.');
       var simp = resp.nivel === 'nada';
-      var link = function (u) { return BASE + (simp ? u.replace('/', '/simples/') : u); };
+      var link = function (u) { return BASE + (simp ? u.replace('/', '/' + SIMPLES + '/') : u); };
       if (simp) plano = L('Como você está começando, os links levam às versões simplificadas, em linguagem bem simples. No fim de cada uma há um botão para o texto completo do autor. ', 'Since you are just starting out, the links lead to the simplified versions, written in very plain language. At the end of each one there is a button to the author’s full text. ') + plano;
       var r = $('#qi-res');
-      r.innerHTML = '<p class="kicker">' + L('Seu caminho', 'Your path') + '</p><h2>' + esc(t.t) + '</h2><p>' + esc(t.d) + '</p><p class="fino">' + plano + L(' Cerca de ' + mins + ' min de leitura.', ' About ' + mins + ' min of reading.') + '</p>' +
+      r.innerHTML = '<p class="kicker">' + L('Seu caminho', 'Your path') + '</p><h2>' + esc(t.t) + '</h2><p>' + esc(t.d) + '</p><p class="fino">' + plano + L(' Cerca de ' + mins + ' min de leitura.', ' About ' + mins + ' min of reading.', ' Unos ' + mins + ' min de lectura.') + '</p>' +
         '<ol class="lista-caps">' + caps.map(function (c) { return '<li><a href="' + link(c[2]) + '" data-cap="' + c[0] + '">' + esc(c[1]) + '</a> <span class="fino">' + c[3] + ' min</span></li>'; }).join('') + '</ol>' +
-        '<p><a class="btn" href="' + link(caps[0][2]) + '">' + L('Começar a ler', 'Start reading') + '</a> <a class="btn alt" href="' + BASE + 'trilhas.html#' + m + '">' + L('Ver a trilha completa', 'See the full path') + '</a></p>' +
-        '<p class="mapa-ti">' + L('Também para você', 'Also for you') + '</p><div class="chips temas-g">' + (EXTRA[resp.quem] || []).map(function (x) { return '<a class="chip" href="' + BASE + x[1] + '">' + x[0] + '</a>'; }).join('') + '<a class="chip" href="' + BASE + 'minha-jornada.html">' + L('Minha jornada', 'My journey') + '</a></div>' +
+        '<p><a class="btn" href="' + link(caps[0][2]) + '">' + L('Começar a ler', 'Start reading') + '</a> <a class="btn alt" href="' + BASE + pg('trilhas.html') + '#' + m + '">' + L('Ver a trilha completa', 'See the full path') + '</a></p>' +
+        '<p class="mapa-ti">' + L('Também para você', 'Also for you') + '</p><div class="chips temas-g">' + (EXTRA[resp.quem] || []).map(function (x) { return '<a class="chip" href="' + BASE + pg(x[1]) + '">' + x[0] + '</a>'; }).join('') + '<a class="chip" href="' + BASE + pg('minha-jornada.html') + '">' + L('Minha jornada', 'My journey') + '</a></div>' +
         '<p><button type="button" class="btn alt" id="qi-de-novo">' + L('Refazer as perguntas', 'Retake the questions') + '</button></p>';
       r.hidden = false;
       $('#qi-de-novo').addEventListener('click', function () { resp = {}; r.hidden = true; $$('.pq', qi).forEach(function (f, i) { f.hidden = i > 0; $$('.op-q', f).forEach(function (b) { b.classList.remove('on'); }); }); });
@@ -347,7 +359,7 @@
           $$('.op', caixa).forEach(function (bb) { if (ops[+bb.dataset.i].k === 'certa') bb.classList.add('certa'); bb.disabled = true; });
           if (x.k !== 'certa') b.classList.add('errada'); else pts++;
           var msg = x.k === 'certa' ? '<p class="ok">' + L('<strong>Boa resposta.</strong> Ela vai direto ao ponto que a objeção levanta.', '<strong>Good reply.</strong> It goes straight to the point the objection raises.') + '</p>'
-            : x.k === 'outra' ? '<p class="no">' + L('<strong>Boa resposta, mas para outra objeção.</strong> Ela responde a: “' + esc(x.ref) + '”. No debate, é preciso responder ao que foi dito.', '<strong>A good reply, but to a different objection.</strong> It answers: “' + esc(x.ref) + '”. In a debate, you need to respond to what was actually said.') + '</p>'
+            : x.k === 'outra' ? '<p class="no">' + L('<strong>Boa resposta, mas para outra objeção.</strong> Ela responde a: “' + esc(x.ref) + '”. No debate, é preciso responder ao que foi dito.', '<strong>A good reply, but to a different objection.</strong> It answers: “' + esc(x.ref) + '”. In a debate, you need to respond to what was actually said.', '<strong>Buena respuesta, pero a otra objeción.</strong> Responde a: “' + esc(x.ref) + '”. En un debate, hay que responder a lo que se dijo.') + '</p>'
             : '<p class="no"><strong>' + L('Resposta fraca.', 'Weak reply.') + '</strong> ' + esc(x.ex) + '</p>';
           fb.innerHTML = msg + '<details class="gaveta" open><summary>' + L('Resposta completa do autor', 'The author’s full reply') + '</summary><div class="original">' + o[2] + '</div>' +
             (o[4].length ? '<p class="fino">' + L('Aprofunde: ', 'Go deeper: ') + o[4].map(function (r) { return '<a href="' + BASE + r[1] + '">' + r[0] + '</a>'; }).join(' · ') + '</p>' : '') + '</details>' +
@@ -358,10 +370,12 @@
       });
     };
     var fim = function () {
-      var nota = EN
+      var nota = ES
+        ? (pts >= 7 ? 'Excelente: reconoces la respuesta correcta a cada objeción.' : pts >= 5 ? 'Muy bien. Repasa las objeciones en las que fallaste en Desmontando objeciones.' : 'Sigue practicando: lee las respuestas completas e inténtalo de nuevo.')
+        : EN
         ? (pts >= 7 ? 'Excellent: you recognize the right reply to each objection.' : pts >= 5 ? 'Very good. Review the objections you missed in Debunking objections.' : 'Keep practicing: read the full replies and try again.')
         : (pts >= 7 ? 'Excelente: você reconhece a resposta certa para cada objeção.' : pts >= 5 ? 'Muito bom. Revise as objeções em que errou em Desbancando objeções.' : 'Continue treinando: leia as respostas completas e tente de novo.');
-      caixa.innerHTML = '<p class="placar">' + pts + L(' de ', ' of ') + RODADAS + '</p><p>' + nota + '</p><p><button type="button" class="btn">' + L('Jogar de novo', 'Play again') + '</button> <a class="btn alt" href="' + BASE + 'desbancando.html">' + L('Desbancando objeções', 'Debunking objections') + '</a></p>';
+      caixa.innerHTML = '<p class="placar">' + pts + L(' de ', ' of ') + RODADAS + '</p><p>' + nota + '</p><p><button type="button" class="btn">' + L('Jogar de novo', 'Play again') + '</button> <a class="btn alt" href="' + BASE + pg('desbancando.html') + '">' + L('Desbancando objeções', 'Debunking objections') + '</a></p>';
       $('#sim-n', sim).textContent = L('Resultado', 'Result');
       $('.btn', caixa).addEventListener('click', inicia);
     };
@@ -442,7 +456,7 @@
       if (dir.resto) h += '<text class="mc-vazio" x="750" y="540" text-anchor="middle">' + L('e mais ', 'and ') + dir.resto + L('', ' more') + '</text>';
       h += no(i, 450, 280, 'centro');
       sv.innerHTML = h; sel.value = String(i);
-      def.innerHTML = '<p class="kicker">' + esc(C.g[n[2]] || '') + '</p><h2>' + esc(n[0]) + '</h2><p>' + esc(n[1]) + '</p><p class="fino"><a href="' + BASE + 'glossario.html#' + n[4] + '">' + L('No glossário', 'In the glossary') + '</a>' + (n[5] ? ' · <a href="' + BASE + n[5] + '">' + n[6] + ' →</a>' : '') + '</p>';
+      def.innerHTML = '<p class="kicker">' + esc(C.g[n[2]] || '') + '</p><h2>' + esc(n[0]) + '</h2><p>' + esc(n[1]) + '</p><p class="fino"><a href="' + BASE + pg('glossario.html') + '#' + n[4] + '">' + L('No glossário', 'In the glossary') + '</a>' + (n[5] ? ' · <a href="' + BASE + n[5] + '">' + n[6] + ' →</a>' : '') + '</p>';
     };
     sv.addEventListener('click', function (ev) { var g = ev.target.closest('.mc-no'); if (g) vai(+g.dataset.i); });
     sv.addEventListener('keydown', function (ev) { var g = ev.target.closest('.mc-no'); if (g && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); vai(+g.dataset.i); } });
@@ -493,7 +507,7 @@
     var total = Object.keys(J.c).length, nl = Object.keys(lidos).filter(function (k) { return lidos[k] && J.c[k]; }).length;
     var nd = 0, nn = 0; Object.keys(dest).forEach(function (k) { dest[k].forEach(function (h) { nd++; if (h.n) nn++; }); });
     var pc = Math.round(100 * nl / total);
-    jr.innerHTML = '<div class="jor-n"><strong>' + nl + '</strong><span>' + L('de ' + total + ' textos lidos', 'of ' + total + ' texts read') + '</span></div><div class="jor-n"><strong>' + pc + '%</strong><span>' + L('da coleção', 'of the collection') + '</span></div><div class="jor-n"><strong>' + nd + '</strong><span>' + L('destaques', 'highlights') + '</span></div><div class="jor-n"><strong>' + nn + '</strong><span>' + L('anotações', 'notes') + '</span></div>';
+    jr.innerHTML = '<div class="jor-n"><strong>' + nl + '</strong><span>' + L('de ' + total + ' textos lidos', 'of ' + total + ' texts read', 'de ' + total + ' textos leídos') + '</span></div><div class="jor-n"><strong>' + pc + '%</strong><span>' + L('da coleção', 'of the collection') + '</span></div><div class="jor-n"><strong>' + nd + '</strong><span>' + L('destaques', 'highlights') + '</span></div><div class="jor-n"><strong>' + nn + '</strong><span>' + L('anotações', 'notes') + '</span></div>';
     $('#jor-vols').innerHTML = J.v.map(function (v) {
       var n = Object.keys(lidos).filter(function (k) { return lidos[k] && k.split('-')[0] === String(v[0]); }).length;
       return '<a class="jor-vol" href="' + BASE + v[3] + '/"><span class="nv">' + v[1] + '</span><span class="jt">' + esc(v[2]) + '</span><span class="jb"><i style="width:' + (100 * n / v[4]) + '%"></i></span><span class="jc">' + n + '/' + v[4] + '</span></a>';
