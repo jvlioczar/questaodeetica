@@ -272,29 +272,53 @@
       var x = cv.getContext('2d'), W = cv.width, H = cv.height;
       var m = Math.round(W * 0.083), largura = W - m * 2;          /* margem proporcional */
       var g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#0b0a6b'); g.addColorStop(1, '#2a2ba8'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-      var topo = Math.round(H * 0.111), rodape = Math.round(H * 0.115);
-      /* marca: anel com pupila mordida */
-      x.strokeStyle = '#4bbbe8'; x.lineCap = 'round'; x.lineWidth = 11;
-      x.beginPath(); x.arc(m + 50, topo, 47, 0, 2 * Math.PI); x.stroke();
-      x.fillStyle = '#4bbbe8'; x.save(); x.translate(m + 50 - 20 * 3.01, topo - 20 * 3.01); x.scale(3.01, 3.01); x.fill(new Path2D('M27.78 20.51A7.8 7.8 0 1 0 20.51 27.78A5.4 5.4 0 0 1 27.78 20.51Z')); x.restore();
-      x.fillStyle = '#4bbbe8'; x.font = '700 150px Fraunces, Georgia, serif'; x.textAlign = 'right'; x.fillText('“', W - m, topo + 100); x.textAlign = 'left';
-      /* trecho: ocupa o espaço entre a marca e o rodapé */
-      var y1 = topo + Math.round(H * 0.11), y2 = H - rodape - Math.round(H * 0.075), alturaMax = y2 - y1;
+      var FAM = '"Plus Jakarta Sans", Arial, sans-serif';
+      /* diminui o corpo da letra ate a linha caber na largura */
+      var ajusta = function (txt, peso, fam, ini, min) {
+        for (var s = ini; s > min; s--) { x.font = peso + ' ' + s + 'px ' + fam; if (x.measureText(txt).width <= largura) return s; }
+        x.font = peso + ' ' + min + 'px ' + fam; return min;
+      };
+      /* quebra na largura; devolve null se passar de maxL linhas */
+      var parte = function (txt, maxL) {
+        var ps = String(txt || '').split(' '), ls = [], l = '';
+        for (var k = 0; k < ps.length; k++) { var tst = l ? l + ' ' + ps[k] : ps[k]; if (x.measureText(tst).width > largura && l) { ls.push(l); l = ps[k]; } else l = tst; }
+        if (l) ls.push(l);
+        return ls.length > maxL ? null : ls;
+      };
+      /* ----- rodape: medido de baixo para cima, nunca cortado ----- */
+      var base = H - Math.round(H * 0.052);
+      var tamPe = Math.max(20, Math.round(W * 0.026)), tamAut = Math.max(24, Math.round(W * 0.0315));
+      var site = L('Questão de Ética', 'A Question of Ethics', 'Cuestión de Ética') + ' · questaodeetica.biblioverse.org';
+      var sSite = ajusta(site, '500', FAM, tamPe, 17);
+      var sAut = ajusta('Luciano Carlos Cunha', '700', FAM, tamAut, 20);
+      var sLoc = tamPe, locLs = null;
+      while (sLoc >= 17) { x.font = '500 ' + sLoc + 'px ' + FAM; locLs = parte(local, 2); if (locLs) break; sLoc--; }
+      if (!locLs) { x.font = '500 17px ' + FAM; sLoc = 17; locLs = (parte(local, 99) || [local]).slice(0, 2); }
+      var passo = Math.round(sLoc * 1.5), yL = [];
+      for (var k2 = 0; k2 < locLs.length; k2++) yL.push(base - passo * (locLs.length - k2));
+      var yA = yL[0] - Math.round(sAut * 1.5);
+      var yBarra = yA - Math.round(sAut * 1.2);
+      x.fillStyle = '#4bbbe8'; x.fillRect(m, yBarra, Math.round(W * 0.074), Math.round(W * 0.0056));
+      x.fillStyle = '#ffffff'; x.font = '700 ' + sAut + 'px ' + FAM; x.fillText('Luciano Carlos Cunha', m, yA);
+      x.fillStyle = '#bfe8fa'; x.font = '500 ' + sLoc + 'px ' + FAM;
+      for (var k3 = 0; k3 < locLs.length; k3++) x.fillText(locLs[k3], m, yL[k3]);
+      x.font = '500 ' + sSite + 'px ' + FAM; x.fillText(site, m, base);
+      /* ----- marca: anel com pupila mordida ----- */
+      var raio = Math.round(W * 0.0435), cy = Math.round(H * 0.075) + raio, esc = raio / 15.6;
+      x.strokeStyle = '#4bbbe8'; x.lineCap = 'round'; x.lineWidth = Math.round(W * 0.0102);
+      x.beginPath(); x.arc(m + raio, cy, raio, 0, 2 * Math.PI); x.stroke();
+      x.fillStyle = '#4bbbe8'; x.save(); x.translate(m + raio - 20 * esc, cy - 20 * esc); x.scale(esc, esc); x.fill(new Path2D('M27.78 20.51A7.8 7.8 0 1 0 20.51 27.78A5.4 5.4 0 0 1 27.78 20.51Z')); x.restore();
+      x.fillStyle = '#4bbbe8'; x.font = '700 ' + Math.round(W * 0.139) + 'px Fraunces, Georgia, serif'; x.textAlign = 'right'; x.fillText('“', W - m, cy + Math.round(W * 0.0926)); x.textAlign = 'left';
+      /* ----- trecho: ocupa o que sobra entre a marca e o rodape ----- */
+      var y1 = cy + raio + Math.round(H * 0.045), y2 = yBarra - Math.round(H * 0.045), alturaMax = y2 - y1;
       var tam = Math.round(W * 0.062), linhas, alt;
       var quebra = function () { var ps = t.split(' '), ls_ = [], l = ''; x.font = '600 ' + tam + 'px Fraunces, Georgia, serif'; ps.forEach(function (p) { var tst = l ? l + ' ' + p : p; if (x.measureText(tst).width > largura && l) { ls_.push(l); l = p; } else l = tst; }); if (l) ls_.push(l); return ls_; };
-      do { linhas = quebra(); alt = tam * 1.3; if (linhas.length * alt <= alturaMax || tam <= 26) break; tam -= 3; } while (true);
-      var max = Math.floor(alturaMax / alt);
+      do { linhas = quebra(); alt = Math.round(tam * 1.3); if (linhas.length * alt <= alturaMax || tam <= 20) break; tam -= 2; } while (true);
+      var max = Math.max(1, Math.floor(alturaMax / alt));
       if (linhas.length > max) { linhas = linhas.slice(0, max); linhas[max - 1] = linhas[max - 1].replace(/\s+\S*$/, '') + '…'; }
       x.fillStyle = '#ffffff'; x.font = '600 ' + tam + 'px Fraunces, Georgia, serif';
       var y0 = y1 + (alturaMax - linhas.length * alt) / 2 + tam;
-      linhas.forEach(function (l, k) { x.fillText(l, m, y0 + k * alt); });
-      /* crédito */
-      var yr = H - rodape;
-      x.fillStyle = '#4bbbe8'; x.fillRect(m, yr, 80, 6);
-      x.fillStyle = '#ffffff'; x.font = '700 34px "Plus Jakarta Sans", Arial, sans-serif'; x.fillText('Luciano Carlos Cunha', m, yr + 60);
-      x.fillStyle = '#bfe8fa'; x.font = '500 28px "Plus Jakarta Sans", Arial, sans-serif';
-      var loc = local.length > 60 ? local.slice(0, 58) + '…' : local; x.fillText(loc, m, yr + 105);
-      x.fillText(L('Questão de Ética', 'A Question of Ethics', 'Cuestión de Ética') + ' · questaodeetica.biblioverse.org', m, yr + 150);
+      linhas.forEach(function (l, k4) { x.fillText(l, m, y0 + k4 * alt); });
     };
     var compartilha = function (t, limpo) {
       var tl = limpo || semNum(t);
