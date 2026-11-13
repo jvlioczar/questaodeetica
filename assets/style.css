@@ -636,3 +636,6 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .veu-caso{margin-top:16px;padding-top:12px;border-top:1px solid var(--linha)}
 .veu-caso .sn .btn{text-align:left}
 .veu-nota{margin:.7em 0 0;padding-top:.6em;border-top:1px solid #0b0a6b26}
+.fmt-linha{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chip-fmt{border:1.5px solid var(--linha,#d7e3ee);background:#fff;color:inherit;border-radius:99px;padding:6px 14px;font:600 .85rem inherit;cursor:pointer}
+.chip-fmt.on{background:var(--marinho,#0b0a6b);border-color:var(--marinho,#0b0a6b);color:#fff}

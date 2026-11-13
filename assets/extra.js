@@ -14,6 +14,9 @@
   var pg = window.qePg || function (n) { return n; };
   var SIMPLES = { pt: 'simples', en: 'simplified', es: 'simplificada' }[LG];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  /* numeros de nota fora do texto copiado ou compartilhado; o texto guardado continua com eles, pois e a ancora do destaque */
+  function semNumNo(no) { $$('sup.nr', no).forEach(function (x) { x.parentNode.removeChild(x); }); return String(no.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function semNum(t) { return String(t == null ? '' : t).replace(/([A-Za-z\u00C0-\u024F][.,;:!?\u201D\u2019"')\]]{0,2})\d{1,3}(?![0-9A-Za-z\u00C0-\u024F])/g, '$1').replace(/\s+/g, ' ').trim(); }
   function dados(id) { var el = document.getElementById(id); return el ? JSON.parse(el.textContent) : null; }
   var ls = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (x) { return d; } },
@@ -194,6 +197,7 @@
     barra.innerHTML = '<button type="button" data-s="destacar">' + L('Destacar', 'Highlight') + '</button><button type="button" data-s="anotar">' + L('Anotar', 'Add note') + '</button><button type="button" data-s="compartilhar">' + L('Compartilhar', 'Share') + '</button><button type="button" data-s="copiar">' + L('Copiar com a fonte', 'Copy with source') + '</button>';
     document.body.appendChild(barra);
     var selAtual = null;
+    /* o trecho sai sem os números das notas de rodapé (ex.: "espécie humana12.") */
     var leSel = function () {
       var s = window.getSelection(); if (!s || s.isCollapsed || !s.rangeCount) return null;
       var r = s.getRangeAt(0), t = s.toString().replace(/\s+/g, ' ').trim(); if (t.length < 3) return null;
@@ -203,7 +207,7 @@
       var pre = document.createRange(); pre.setStart(bl, 0); pre.setEnd(r.startContainer, r.startOffset);
       var o = pre.toString().length;
       var fim = bl.contains(r.endContainer) ? (function () { var x = document.createRange(); x.setStart(bl, 0); x.setEnd(r.endContainer, r.endOffset); return x.toString().length; })() : bl.textContent.length;
-      return { b: i, o: o, t: bl.textContent.slice(o, fim), bloco: bl, rect: r.getBoundingClientRect(), txt: t };
+      return { b: i, o: o, t: bl.textContent.slice(o, fim), bloco: bl, rect: r.getBoundingClientRect(), txt: t, txtLimpo: semNumNo(r.cloneContents()) };
     };
     var mostra = function () {
       selAtual = leSel();
@@ -233,13 +237,13 @@
       var s = selAtual;
       if (b.dataset.s === 'destacar') novoDest('');
       else if (b.dataset.s === 'anotar') { editaNota('', function (n) { selAtual = s; novoDest(n); }); }
-      else if (b.dataset.s === 'copiar') { copiar('“' + s.txt + '”\n— ' + credito(), b); }
-      else if (b.dataset.s === 'compartilhar') { compartilha(s.txt); barra.hidden = true; }
+      else if (b.dataset.s === 'copiar') { copiar('“' + (s.txtLimpo || semNum(s.txt)) + '”\n— ' + credito(), b); }
+      else if (b.dataset.s === 'compartilhar') { compartilha(s.txt, s.txtLimpo); barra.hidden = true; }
     });
     orig.addEventListener('click', function (ev) {
       var m = ev.target.closest('mark.dest'); if (!m) return;
       var h = meus().filter(function (x) { return x.id === m.dataset.id; })[0]; if (!h) return;
-      var c = modal(L('Seu destaque', 'Your highlight'), '<blockquote class="dest-cit">' + esc(h.t) + '</blockquote>' + (h.n ? '<p class="dest-nota">' + esc(h.n) + '</p>' : '') +
+      var c = modal(L('Seu destaque', 'Your highlight'), '<blockquote class="dest-cit">' + esc(semNum(h.t)) + '</blockquote>' + (h.n ? '<p class="dest-nota">' + esc(h.n) + '</p>' : '') +
         '<p class="jan-btns"><button type="button" class="btn alt" data-d="nota">' + (h.n ? L('Editar anotação', 'Edit note') : L('Adicionar anotação', 'Add note')) + '</button><button type="button" class="btn alt" data-d="comp">' + L('Compartilhar', 'Share') + '</button><button type="button" class="btn alt" data-d="rem">' + L('Remover destaque', 'Remove highlight') + '</button></p>');
       $('[data-d="rem"]', c).addEventListener('click', function () { remove(h.id); dlg.close(); });
       $('[data-d="comp"]', c).addEventListener('click', function () { compartilha(h.t); });
@@ -258,37 +262,82 @@
       var frag = p.length > 12 ? enc(p.slice(0, 5).join(' ')) + ',' + enc(p.slice(-4).join(' ')) : enc(t);
       return location.origin + location.pathname + '#:~:text=' + frag;
     };
+    /* formatos prontos para redes sociais */
+    var FORMATOS = [
+      { k: 'post', w: 1080, h: 1350, r: L('Retrato 4:5', 'Portrait 4:5', 'Retrato 4:5') },
+      { k: 'quadrado', w: 1080, h: 1080, r: L('Quadrado 1:1', 'Square 1:1', 'Cuadrado 1:1') },
+      { k: 'story', w: 1080, h: 1920, r: L('Story 9:16', 'Story 9:16', 'Story 9:16') }
+    ];
     var desenha = function (cv, t) {
       var x = cv.getContext('2d'), W = cv.width, H = cv.height;
+      var m = Math.round(W * 0.083), largura = W - m * 2;          /* margem proporcional */
       var g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#0b0a6b'); g.addColorStop(1, '#2a2ba8'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-      x.strokeStyle = '#4bbbe8'; x.lineWidth = 9; x.lineCap = 'round';
-      x.lineWidth = 11; x.beginPath(); x.arc(140, 150, 47, 0, 2 * Math.PI); x.stroke(); x.fillStyle = '#4bbbe8'; x.save(); x.translate(140 - 20 * 3.01, 150 - 20 * 3.01); x.scale(3.01, 3.01); x.fill(new Path2D('M27.78 20.51A7.8 7.8 0 1 0 20.51 27.78A5.4 5.4 0 0 1 27.78 20.51Z')); x.restore();
-      x.fillStyle = '#4bbbe8'; x.font = '700 150px Fraunces, Georgia, serif'; x.fillText('“', 820, 250);
-      var tam = 60, linhas, lim = 980;
-      var quebra = function () { var ps = t.split(' '), ls_ = [], l = ''; x.font = '600 ' + tam + 'px Fraunces, Georgia, serif'; ps.forEach(function (p) { var tst = l ? l + ' ' + p : p; if (x.measureText(tst).width > 900 && l) { ls_.push(l); l = p; } else l = tst; }); if (l) ls_.push(l); return ls_; };
-      do { linhas = quebra(); tam -= 4; } while (linhas.length * tam * 1.3 > 760 && tam > 30);
-      tam += 4; var alt = tam * 1.3, max = Math.floor(lim * 0.78 / alt);
+      var topo = Math.round(H * 0.111), rodape = Math.round(H * 0.115);
+      /* marca: anel com pupila mordida */
+      x.strokeStyle = '#4bbbe8'; x.lineCap = 'round'; x.lineWidth = 11;
+      x.beginPath(); x.arc(m + 50, topo, 47, 0, 2 * Math.PI); x.stroke();
+      x.fillStyle = '#4bbbe8'; x.save(); x.translate(m + 50 - 20 * 3.01, topo - 20 * 3.01); x.scale(3.01, 3.01); x.fill(new Path2D('M27.78 20.51A7.8 7.8 0 1 0 20.51 27.78A5.4 5.4 0 0 1 27.78 20.51Z')); x.restore();
+      x.fillStyle = '#4bbbe8'; x.font = '700 150px Fraunces, Georgia, serif'; x.textAlign = 'right'; x.fillText('“', W - m, topo + 100); x.textAlign = 'left';
+      /* trecho: ocupa o espaço entre a marca e o rodapé */
+      var y1 = topo + Math.round(H * 0.11), y2 = H - rodape - Math.round(H * 0.075), alturaMax = y2 - y1;
+      var tam = Math.round(W * 0.062), linhas, alt;
+      var quebra = function () { var ps = t.split(' '), ls_ = [], l = ''; x.font = '600 ' + tam + 'px Fraunces, Georgia, serif'; ps.forEach(function (p) { var tst = l ? l + ' ' + p : p; if (x.measureText(tst).width > largura && l) { ls_.push(l); l = p; } else l = tst; }); if (l) ls_.push(l); return ls_; };
+      do { linhas = quebra(); alt = tam * 1.3; if (linhas.length * alt <= alturaMax || tam <= 26) break; tam -= 3; } while (true);
+      var max = Math.floor(alturaMax / alt);
       if (linhas.length > max) { linhas = linhas.slice(0, max); linhas[max - 1] = linhas[max - 1].replace(/\s+\S*$/, '') + '…'; }
       x.fillStyle = '#ffffff'; x.font = '600 ' + tam + 'px Fraunces, Georgia, serif';
-      var y0 = 300 + (760 - linhas.length * alt) / 2 + tam;
-      linhas.forEach(function (l, k) { x.fillText(l, 90, y0 + k * alt); });
-      x.fillStyle = '#4bbbe8'; x.fillRect(90, 1110, 80, 6);
-      x.fillStyle = '#ffffff'; x.font = '700 34px "Plus Jakarta Sans", Arial, sans-serif'; x.fillText('Luciano Carlos Cunha', 90, 1170);
+      var y0 = y1 + (alturaMax - linhas.length * alt) / 2 + tam;
+      linhas.forEach(function (l, k) { x.fillText(l, m, y0 + k * alt); });
+      /* crédito */
+      var yr = H - rodape;
+      x.fillStyle = '#4bbbe8'; x.fillRect(m, yr, 80, 6);
+      x.fillStyle = '#ffffff'; x.font = '700 34px "Plus Jakarta Sans", Arial, sans-serif'; x.fillText('Luciano Carlos Cunha', m, yr + 60);
       x.fillStyle = '#bfe8fa'; x.font = '500 28px "Plus Jakarta Sans", Arial, sans-serif';
-      var loc = local.length > 60 ? local.slice(0, 58) + '…' : local; x.fillText(loc, 90, 1215);
-      x.fillText(L('Questão de Ética', 'A Question of Ethics', 'Cuestión de Ética') + ' · questaodeetica.biblioverse.org', 90, 1275);
+      var loc = local.length > 60 ? local.slice(0, 58) + '…' : local; x.fillText(loc, m, yr + 105);
+      x.fillText(L('Questão de Ética', 'A Question of Ethics', 'Cuestión de Ética') + ' · questaodeetica.biblioverse.org', m, yr + 150);
     };
-    var compartilha = function (t) {
-      var c = modal(L('Compartilhar trecho', 'Share passage'), '<canvas class="cv-trecho" width="1080" height="1350" aria-label="' + L('Imagem com o trecho', 'Image with the passage') + '"></canvas><p class="jan-btns"><button type="button" class="btn" data-k="img">' + L('Baixar imagem', 'Download image') + '</button><button type="button" class="btn alt" data-k="link">' + L('Copiar link do trecho', 'Copy link to passage') + '</button>' + (navigator.share ? '<button type="button" class="btn alt" data-k="share">' + L('Compartilhar…', 'Share…') + '</button>' : '') + '</p><p class="fino">' + L('O link abre esta página já rolada e com o trecho destacado (nos navegadores que aceitam esse recurso).', 'The link opens this page scrolled to the passage, with it highlighted (in browsers that support this feature).') + '</p>');
+    var compartilha = function (t, limpo) {
+      var tl = limpo || semNum(t);
+      var fmt = FORMATOS[0];
+      var opcoes = FORMATOS.map(function (f, k) { return '<button type="button" class="chip-fmt' + (k ? '' : ' on') + '" data-f="' + f.k + '" aria-pressed="' + (k ? 'false' : 'true') + '">' + f.r + '</button>'; }).join('');
+      var c = modal(L('Compartilhar trecho', 'Share passage', 'Compartir fragmento'),
+        '<p class="fmt-linha" role="group" aria-label="' + L('Formato da imagem', 'Image format', 'Formato de la imagen') + '">' + opcoes + '</p>' +
+        '<canvas class="cv-trecho" width="1080" height="1350" aria-label="' + L('Imagem com o trecho', 'Image with the passage', 'Imagen con el fragmento') + '"></canvas>' +
+        '<p class="jan-btns"><button type="button" class="btn" data-k="img">' + L('Baixar imagem', 'Download image', 'Descargar imagen') + '</button>' +
+        '<button type="button" class="btn alt" data-k="copiar-img">' + L('Copiar imagem', 'Copy image', 'Copiar imagen') + '</button>' +
+        '<button type="button" class="btn alt" data-k="link">' + L('Copiar link do trecho', 'Copy link to passage', 'Copiar enlace del fragmento') + '</button>' +
+        (navigator.share ? '<button type="button" class="btn alt" data-k="share">' + L('Compartilhar…', 'Share…', 'Compartir…') + '</button>' : '') + '</p>' +
+        '<p class="fino">' + L('A imagem sai pronta para as redes sociais. O link abre esta página já rolada e com o trecho destacado (nos navegadores que aceitam esse recurso).',
+                               'The image comes ready for social media. The link opens this page scrolled to the passage, with it highlighted (in browsers that support this feature).',
+                               'La imagen sale lista para las redes sociales. El enlace abre esta página desplazada hasta el fragmento, con él resaltado (en los navegadores que aceptan esa función).') + '</p>');
       var cv = $('canvas', c);
+      var pinta = function () { cv.width = fmt.w; cv.height = fmt.h; desenha(cv, tl); };
       var f = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('600 60px Fraunces'), document.fonts.load('700 34px "Plus Jakarta Sans"')]) : Promise.resolve();
-      f.then(function () { desenha(cv, t); }, function () { desenha(cv, t); });
-      $('[data-k="img"]', c).addEventListener('click', function () { cv.toBlob(function (b) { baixar(L('trecho-questao-de-etica.png', 'passage-questao-de-etica.png'), b); }); });
+      f.then(pinta, pinta);
+      $$('.chip-fmt', c).forEach(function (b) {
+        b.addEventListener('click', function () {
+          fmt = FORMATOS.filter(function (x) { return x.k === b.dataset.f; })[0];
+          $$('.chip-fmt', c).forEach(function (o) { o.classList.toggle('on', o === b); o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+          pinta();
+        });
+      });
+      var nomeArq = function () { return L('trecho-questao-de-etica-', 'passage-a-question-of-ethics-', 'fragmento-cuestion-de-etica-') + fmt.k + '.png'; };
+      $('[data-k="img"]', c).addEventListener('click', function () { cv.toBlob(function (b) { baixar(nomeArq(), b); }); });
+      var ci = $('[data-k="copiar-img"]', c);
+      if (!(navigator.clipboard && window.ClipboardItem)) ci.remove();
+      else ci.addEventListener('click', function () {
+        var bt = this;
+        cv.toBlob(function (b) {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]).then(function () {
+            var antes = bt.textContent; bt.textContent = L('Copiada!', 'Copied!', '¡Copiada!'); setTimeout(function () { bt.textContent = antes; }, 1800);
+          }, function () { bt.textContent = L('Não deu, baixe a imagem', 'Could not copy, download it', 'No se pudo, descárgala'); });
+        });
+      });
       $('[data-k="link"]', c).addEventListener('click', function () { copiar(linkTrecho(t), this); });
       var sh = $('[data-k="share"]', c);
       if (sh) sh.addEventListener('click', function () {
         cv.toBlob(function (b) {
-          var arq = new File([b], L('trecho.png', 'passage.png'), { type: 'image/png' }), dadosS = { title: titulo, text: '“' + t + '” — ' + credito(), url: linkTrecho(t) };
+          var arq = new File([b], nomeArq(), { type: 'image/png' }), dadosS = { title: titulo, text: '“' + tl + '” — ' + credito(), url: linkTrecho(t) };
           if (navigator.canShare && navigator.canShare({ files: [arq] })) dadosS.files = [arq];
           navigator.share(dadosS).catch(function () {});
         });
@@ -518,7 +567,7 @@
       $('#jor-dest').innerHTML = ks.length ? ks.map(function (k) {
         var c = J.c[k];
         return '<section class="jor-cap"><h3><a href="' + BASE + c[1] + '">' + esc(c[0]) + '</a> <span class="fino">Vol. ' + c[2] + (c[3] ? L(', cap. ', ', ch. ') + c[3] : '') + '</span></h3>' +
-          dest[k].map(function (h) { return '<div class="jor-d"><blockquote>' + esc(h.t) + '</blockquote>' + (h.n ? '<p class="dest-nota">' + esc(h.n) + '</p>' : '') + '<p class="fino">' + esc(h.d || '') + ' · <button type="button" class="link-btn" data-k="' + k + '" data-id="' + h.id + '">' + L('remover', 'remove') + '</button></p></div>'; }).join('') + '</section>';
+          dest[k].map(function (h) { return '<div class="jor-d"><blockquote>' + esc(semNum(h.t)) + '</blockquote>' + (h.n ? '<p class="dest-nota">' + esc(h.n) + '</p>' : '') + '<p class="fino">' + esc(h.d || '') + ' · <button type="button" class="link-btn" data-k="' + k + '" data-id="' + h.id + '">' + L('remover', 'remove') + '</button></p></div>'; }).join('') + '</section>';
       }).join('') : '<p class="vazio">' + L('Você ainda não tem destaques. Abra um texto, selecione um trecho e escolha <strong>Destacar</strong>.', 'You have no highlights yet. Open a text, select a passage and choose <strong>Highlight</strong>.') + '</p>';
     };
     lista();
@@ -532,7 +581,7 @@
       Object.keys(dest).forEach(function (k) {
         var c = J.c[k]; if (!c) return;
         md += '## ' + c[0] + ' (Vol. ' + c[2] + (c[3] ? L(', cap. ', ', ch. ') + c[3] : '') + ')\n' + location.origin + location.pathname.replace(/minha-jornada\.html$/, '') + c[1] + '\n\n';
-        dest[k].forEach(function (h) { md += '> ' + h.t + '\n\n' + (h.n ? L('Nota: ', 'Note: ') + h.n + '\n\n' : ''); });
+        dest[k].forEach(function (h) { md += '> ' + semNum(h.t) + '\n\n' + (h.n ? L('Nota: ', 'Note: ') + h.n + '\n\n' : ''); });
       });
       baixar(L('meus-destaques-questao-de-etica.md', 'my-highlights-questao-de-etica.md'), md, 'text/markdown;charset=utf-8');
     });
