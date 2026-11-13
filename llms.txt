@@ -1,6 +1,37 @@
 # Questão de Ética
 
-> Site-livro com o texto original completo da coleção de 12 volumes de Luciano Carlos Cunha sobre ética animal, com notas, referências e camadas de estudo. Organizado por Julio Cesar Prava.
+> Site-livro com o texto original completo da coleção “Uma Jornada pela Ética Animal: do Básico ao Avançado”, de Luciano Carlos Cunha (12 volumes, 186 textos), sobre ética animal, senciência e especismo, com notas, referências, camadas de estudo e ferramentas interativas.
+
+Como o site se organiza:
+- Cada capítulo traz o texto original do autor, marcado como tal, seguido das notas e das fontes citadas. Camadas de estudo escritas pelo site (resumo em uma frase, explicação para crianças, analogia, o argumento em forma lógica, respostas a objeções, perguntas de revisão) aparecem antes e depois do texto e são sempre identificadas como “camada de estudo, não faz parte do texto original”.
+- Cada capítulo tem também uma versão simplificada, escrita pelo site para iniciantes; para citar o autor, use sempre o texto original.
+- O texto original é em português. As versões em inglês e espanhol são traduções feitas pelo site, não pelo autor.
+- Texto original © Luciano Carlos Cunha, publicado em acesso aberto com apoio da organização Ética Animal e reproduzido com autorização do autor.
+
+## Comece aqui
+- [Por onde eu começo?](https://questaodeetica.biblioverse.org/por-onde-comecar.html): Quatro perguntas rápidas e uma trilha de leitura sob medida.
+- [Sumário completo](https://questaodeetica.biblioverse.org/sumario.html): Todos os 186 textos, por volume.
+- [Volume XII: o essencial](https://questaodeetica.biblioverse.org/v12/): Resumo de toda a coleção em quadros de objeções e respostas.
+- [Desbancando objeções](https://questaodeetica.biblioverse.org/desbancando.html): As objeções mais comuns ao respeito pelos animais e como respondê-las, com remissão aos capítulos.
+- [Glossário](https://questaodeetica.biblioverse.org/glossario.html): 89 termos definidos, com o capítulo de cada um.
+- [Quem é quem](https://questaodeetica.biblioverse.org/pensadores.html): Os autores citados na coleção e a posição de cada um.
+- [Todas as referências](https://questaodeetica.biblioverse.org/referencias.html): A bibliografia dos 12 volumes.
+- [Livro completo em uma página](https://questaodeetica.biblioverse.org/livro-completo.html): O texto original dos 12 volumes em HTML simples, sem scripts.
+- [Sobre o projeto](https://questaodeetica.biblioverse.org/sobre.html): O autor, a organização do site e como citar.
+
+## Volumes
+- [Volume I: Discutindo o especismo](https://questaodeetica.biblioverse.org/v1/): Uma análise das principais tentativas de justificar o especismo
+- [Volume II: Considerando os seres sencientes](https://questaodeetica.biblioverse.org/v2/): Fundamentos da ética centrada na senciência
+- [Volume III: Os animais e o dano da morte](https://questaodeetica.biblioverse.org/v3/): Uma investigação sobre o dano da morte e sua magnitude
+- [Volume IV: O debate sobre a exploração animal](https://questaodeetica.biblioverse.org/v4/): Uma análise dos argumentos das perspectivas divergentes
+- [Volume V: Diferenças entre ambientalismo e consideração pelos animais](https://questaodeetica.biblioverse.org/v5/): Qual o tamanho da divergência?
+- [Volume VI: A quem devemos consideração moral?](https://questaodeetica.biblioverse.org/v6/): O debate sobre o critério da senciência
+- [Volume VII: A ética e a situação dos animais selvagens](https://questaodeetica.biblioverse.org/v7/): Uma análise da questão dos danos naturais
+- [Volume VIII: Um ativismo eficiente](https://questaodeetica.biblioverse.org/v8/): Critérios para escolher quais problemas priorizar e quais estratégias adotar
+- [Volume IX: A ética e o futuro](https://questaodeetica.biblioverse.org/v9/): O que são riscos de sofrimento futuro e como preveni-los
+- [Volume X: Vieses e sua influência](https://questaodeetica.biblioverse.org/v10/): Como vieses influenciam nossas decisões que afetam os animais
+- [Volume XI: Como as diversas teorias da ética abordam a questão animal?](https://questaodeetica.biblioverse.org/v11/): Explorando a relação entre ética normativa e ética aplicada
+- [Volume XII: O essencial sobre ética animal](https://questaodeetica.biblioverse.org/v12/): Um resumo esquemático das principais discussões
 
 ## Volume I: Discutindo o especismo
 - [Um panorama geral do debate sobre a consideração moral dos animais](https://questaodeetica.biblioverse.org/v1/01-um-panorama-geral-do-debate-sobre-a-consideracao-moral.html)
@@ -104,7 +135,7 @@
 - [Seres vivos não sencientes são passíveis de ser prejudicados?](https://questaodeetica.biblioverse.org/v6/17-seres-vivos-nao-sencientes-sao-passiveis-de-ser.html)
 - [O comportamento de certas plantas e fungos mostra que valorizam certas coisas?](https://questaodeetica.biblioverse.org/v6/18-o-comportamento-de-certas-plantas-e-fungos-mostra-que.html)
 - [A vida sem senciência tem valor?](https://questaodeetica.biblioverse.org/v6/19-a-vida-sem-senciencia-tem-valor.html)
-- [Todo ser vivo possui &quot;interesses biológicos&quot;?](https://questaodeetica.biblioverse.org/v6/20-todo-ser-vivo-possui-quot-interesses-biologicos-quot.html)
+- [Todo ser vivo possui "interesses biológicos"?](https://questaodeetica.biblioverse.org/v6/20-todo-ser-vivo-possui-quot-interesses-biologicos-quot.html)
 - [Se plantas forem consideráveis, tanto faz comer animais ou plantas?](https://questaodeetica.biblioverse.org/v6/21-se-plantas-forem-consideraveis-tanto-faz-comer-animais-ou.html)
 
 ## Volume VII: A ética e a situação dos animais selvagens
@@ -212,3 +243,26 @@
 - [Avaliando diferentes estratégias](https://questaodeetica.biblioverse.org/v12/16-avaliando-diferentes-estrategias.html)
 - [Conclusão](https://questaodeetica.biblioverse.org/v12/17-conclusao.html)
 
+## Ferramentas interativas
+- [Teste do especismo](https://questaodeetica.biblioverse.org/ferramentas/teste-do-especismo.html): As quatro perguntas do Volume II aplicadas a uma prática que você escolher.
+- [Loteria do nascimento](https://questaodeetica.biblioverse.org/ferramentas/loteria-do-nascimento.html): Se você nascesse como um animal explorado qualquer, de que espécie seria? Com os números reais.
+- [Um ano em escala](https://questaodeetica.biblioverse.org/ferramentas/escala-do-ano.html): Se todos os animais fossem um ano, quantos segundos seriam os explorados?
+- [Benefício da dúvida](https://questaodeetica.biblioverse.org/ferramentas/beneficio-da-duvida.html): A matriz de decisão para quando não sabemos se um ser sente.
+- [Calculadora do dano da morte](https://questaodeetica.biblioverse.org/ferramentas/dano-da-morte.html): Tempo de vida perdido e qualidade de vida: o raciocínio dos AVAQs.
+- [Calculadora de prioridades](https://questaodeetica.biblioverse.org/ferramentas/prioridades.html): Gravidade, tratabilidade e negligência: onde um recurso ajuda mais?
+- [Identifique o argumento](https://questaodeetica.biblioverse.org/ferramentas/identifique-o-argumento.html): Leia uma frase comum e descubra qual tentativa de justificativa ela usa.
+- [Seriedade de um risco-s](https://questaodeetica.biblioverse.org/ferramentas/riscos-s.html): Gravidade vezes probabilidade: compare cenários de sofrimento futuro.
+- [Véu da imparcialidade](https://questaodeetica.biblioverse.org/ferramentas/veu-da-imparcialidade.html): Escolha regras sem saber quem você será entre os afetados.
+- [Detector de vieses](https://questaodeetica.biblioverse.org/ferramentas/detector-de-vieses.html): Situações do dia a dia para reconhecer os vieses do Volume X.
+- [Calculadora das teorias](https://questaodeetica.biblioverse.org/ferramentas/calculadora-das-teorias.html): Soma, média, maximin, prioridade, igualdade, suficiência: veja o que cada teoria escolhe.
+
+## Outros idiomas
+- [English](https://questaodeetica.biblioverse.org/en/llms.txt)
+- [Español](https://questaodeetica.biblioverse.org/es/llms.txt)
+
+## Optional
+- [Texto completo em Markdown](https://questaodeetica.biblioverse.org/llms-full.txt): o texto original dos 12 volumes, com as notas, num só arquivo.
+- [Trilhas de leitura](https://questaodeetica.biblioverse.org/trilhas.html)
+- [Testes e revisão](https://questaodeetica.biblioverse.org/testes.html)
+- [Área do professor](https://questaodeetica.biblioverse.org/professores.html)
+- [Sitemap](https://questaodeetica.biblioverse.org/sitemap.xml)

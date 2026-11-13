@@ -1,6 +1,37 @@
-# Questão de Ética
+# Cuestión de Ética
 
-> Sitio-libro con el texto original completo de la colección en 12 volúmenes de Luciano Carlos Cunha sobre ética animal, traducido al español, con notas, referencias y capas de estudio. Organizado por Julio Cesar Prava.
+> Sitio-libro con el texto original completo de la colección «Un recorrido por la ética animal: de lo básico a lo avanzado», de Luciano Carlos Cunha (12 volúmenes, 186 textos), sobre ética animal, sintiencia y especismo, con notas, referencias, capas de estudio y herramientas interactivas.
+
+Cómo se organiza el sitio:
+- Cada capítulo trae el texto original del autor, marcado como tal, seguido de las notas y las fuentes citadas. Las capas de estudio escritas por el sitio (resumen en una frase, explicación para niños, analogía, el argumento en forma lógica, respuestas a objeciones, preguntas de repaso) aparecen antes y después del texto y siempre se identifican como «capa de estudio, no forma parte del texto original».
+- Cada capítulo tiene también una versión simplificada, escrita por el sitio para principiantes; para citar al autor, usa siempre el texto original.
+- El texto original está en portugués. Las versiones en inglés y español son traducciones hechas por el sitio, no por el autor.
+- Texto original © Luciano Carlos Cunha, publicado en acceso abierto con el apoyo de la organización Ética Animal y reproducido con autorización del autor.
+
+## Empieza aquí
+- [¿Por dónde empiezo?](https://questaodeetica.biblioverse.org/es/por-donde-empiezo.html): Cuatro preguntas rápidas y una ruta de lectura a tu medida.
+- [Sumario completo](https://questaodeetica.biblioverse.org/es/sumario.html): Los 186 textos, por volumen.
+- [Volumen XII: lo esencial](https://questaodeetica.biblioverse.org/es/v12/): Resumen de toda la colección en cuadros de objeciones y respuestas.
+- [Desmontando objeciones](https://questaodeetica.biblioverse.org/es/desmontando-objeciones.html): Las objeciones más comunes al respeto por los animales y cómo responderlas, con enlaces a los capítulos.
+- [Glosario](https://questaodeetica.biblioverse.org/es/glosario.html): 89 términos definidos, cada uno con su capítulo.
+- [Quién es quién](https://questaodeetica.biblioverse.org/es/quien-es-quien.html): Los autores citados en la colección y la postura de cada uno.
+- [Todas las referencias](https://questaodeetica.biblioverse.org/es/referencias.html): La bibliografía de los 12 volúmenes.
+- [El libro completo en una página](https://questaodeetica.biblioverse.org/es/libro-completo.html): El texto original de los 12 volúmenes en HTML simple, sin scripts.
+- [Sobre el proyecto](https://questaodeetica.biblioverse.org/es/sobre.html): El autor, la organización del sitio y cómo citarlo.
+
+## Volúmenes
+- [Volumen I: Discutiendo el especismo](https://questaodeetica.biblioverse.org/es/v1/): Un análisis de los principales intentos de justificar el especismo
+- [Volumen II: Considerando a los seres sintientes](https://questaodeetica.biblioverse.org/es/v2/): Fundamentos de una ética centrada en la sintiencia
+- [Volumen III: Los animales y el daño de la muerte](https://questaodeetica.biblioverse.org/es/v3/): Una investigación sobre el daño de la muerte y su magnitud
+- [Volumen IV: El debate sobre la explotación animal](https://questaodeetica.biblioverse.org/es/v4/): Un análisis de los argumentos de las perspectivas divergentes
+- [Volumen V: Diferencias entre el ambientalismo y la consideración por los animales](https://questaodeetica.biblioverse.org/es/v5/): ¿Qué tan grande es la divergencia?
+- [Volumen VI: ¿A quién le debemos consideración moral?](https://questaodeetica.biblioverse.org/es/v6/): El debate sobre el criterio de la sintiencia
+- [Volumen VII: La ética y la situación de los animales salvajes](https://questaodeetica.biblioverse.org/es/v7/): Un análisis de la cuestión de los daños naturales
+- [Volumen VIII: Un activismo eficiente](https://questaodeetica.biblioverse.org/es/v8/): Criterios para elegir qué problemas priorizar y qué estrategias adoptar
+- [Volumen IX: La ética y el futuro](https://questaodeetica.biblioverse.org/es/v9/): Qué son los riesgos de sufrimiento futuro y cómo prevenirlos
+- [Volumen X: Los sesgos y su influencia](https://questaodeetica.biblioverse.org/es/v10/): Cómo influyen los sesgos en nuestras decisiones que afectan a los animales
+- [Volumen XI: ¿Cómo abordan las diversas teorías éticas la cuestión animal?](https://questaodeetica.biblioverse.org/es/v11/): Explorando la relación entre la ética normativa y la ética aplicada
+- [Volumen XII: Lo esencial sobre ética animal](https://questaodeetica.biblioverse.org/es/v12/): Un resumen esquemático de las principales discusiones
 
 ## Volumen I: Discutiendo el especismo
 - [Un panorama general del debate sobre la consideración moral de los animales](https://questaodeetica.biblioverse.org/es/v1/01-un-panorama-general-del-debate-sobre-la-consideracion.html)
@@ -212,3 +243,26 @@
 - [Evaluando diferentes estrategias](https://questaodeetica.biblioverse.org/es/v12/16-evaluando-diferentes-estrategias.html)
 - [Conclusión](https://questaodeetica.biblioverse.org/es/v12/17-conclusion.html)
 
+## Herramientas interactivas
+- [Prueba del especismo](https://questaodeetica.biblioverse.org/es/herramientas/prueba-del-especismo.html): Las cuatro preguntas del Volumen II aplicadas a una práctica que tú elijas.
+- [Lotería del nacimiento](https://questaodeetica.biblioverse.org/es/herramientas/loteria-del-nacimiento.html): Si nacieras como un animal explotado elegido al azar, ¿de qué especie serías? Con los números reales.
+- [Un año a escala](https://questaodeetica.biblioverse.org/es/herramientas/un-ano-a-escala.html): Si todos los animales fueran un año, ¿cuántos segundos serían los explotados?
+- [Beneficio de la duda](https://questaodeetica.biblioverse.org/es/herramientas/beneficio-de-la-duda.html): La matriz de decisión para cuando no sabemos si un ser puede sentir.
+- [Calculadora del daño de la muerte](https://questaodeetica.biblioverse.org/es/herramientas/dano-de-la-muerte.html): Tiempo de vida perdido y calidad de vida: el razonamiento detrás de los AVAC.
+- [Calculadora de prioridades](https://questaodeetica.biblioverse.org/es/herramientas/prioridades.html): Gravedad, tratabilidad y desatención: ¿dónde ayuda más un recurso?
+- [Identifica el argumento](https://questaodeetica.biblioverse.org/es/herramientas/identifica-el-argumento.html): Lee una frase común y descubre qué intento de justificación usa.
+- [Gravedad de un riesgo-s](https://questaodeetica.biblioverse.org/es/herramientas/riesgos-s.html): Gravedad por probabilidad: compara escenarios de sufrimiento futuro.
+- [Velo de la imparcialidad](https://questaodeetica.biblioverse.org/es/herramientas/velo-de-la-imparcialidad.html): Elige reglas sin saber quién serás entre los afectados.
+- [Detector de sesgos](https://questaodeetica.biblioverse.org/es/herramientas/detector-de-sesgos.html): Situaciones cotidianas para reconocer los sesgos del Volumen X.
+- [Calculadora de las teorías](https://questaodeetica.biblioverse.org/es/herramientas/calculadora-de-las-teorias.html): Suma, promedio, maximin, prioridad, igualdad, suficiencia: mira qué elige cada teoría.
+
+## Otros idiomas
+- [Português (original)](https://questaodeetica.biblioverse.org/llms.txt)
+- [English](https://questaodeetica.biblioverse.org/en/llms.txt)
+
+## Optional
+- [Texto completo en Markdown](https://questaodeetica.biblioverse.org/llms-full-es.txt): el texto original de los 12 volúmenes, con las notas, en un solo archivo.
+- [Rutas de lectura](https://questaodeetica.biblioverse.org/es/rutas-de-lectura.html)
+- [Pruebas y repaso](https://questaodeetica.biblioverse.org/es/pruebas.html)
+- [Área docente](https://questaodeetica.biblioverse.org/es/area-docente.html)
+- [Sitemap](https://questaodeetica.biblioverse.org/es/sitemap.xml)

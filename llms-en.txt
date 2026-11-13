@@ -1,6 +1,37 @@
-# Questão de Ética
+# A Question of Ethics
 
-> A book site with the complete original text of Luciano Carlos Cunha's 12-volume collection on animal ethics, with notes, references and study layers. Organized by Julio Cesar Prava.
+> A book site with the complete original text of Luciano Carlos Cunha’s collection “A Journey Through Animal Ethics: From Basic to Advanced” (12 volumes, 186 texts), on animal ethics, sentience and speciesism, with notes, references, study layers and interactive tools.
+
+How the site is organized:
+- Each chapter has the author’s original text, marked as such, followed by its notes and the sources it cites. Study layers written by the site (a one-sentence summary, an explanation for kids, an analogy, the argument in logical form, replies to objections, review questions) appear before and after the text and are always labeled “study layer, not part of the original text”.
+- Each chapter also has a simplified version written by the site for beginners; to quote the author, always use the original text.
+- The original text is in Portuguese. The English and Spanish versions are translations made by the site, not by the author.
+- Original text © Luciano Carlos Cunha, published in open access with support from the organization Animal Ethics and reproduced with the author’s permission.
+
+## Start here
+- [Where do I start?](https://questaodeetica.biblioverse.org/en/where-to-start.html): Four quick questions and a reading path tailored to you.
+- [Full contents](https://questaodeetica.biblioverse.org/en/contents.html): All 186 texts, by volume.
+- [Volume XII: the essentials](https://questaodeetica.biblioverse.org/en/v12/): A summary of the whole collection in tables of objections and replies.
+- [Debunking objections](https://questaodeetica.biblioverse.org/en/debunking-objections.html): The most common objections to respecting animals and how to answer them, with links to the chapters.
+- [Glossary](https://questaodeetica.biblioverse.org/en/glossary.html): 89 defined terms, each with its chapter.
+- [Who is who](https://questaodeetica.biblioverse.org/en/who-is-who.html): The authors cited in the collection and where each one stands.
+- [All references](https://questaodeetica.biblioverse.org/en/references.html): The bibliography of the 12 volumes.
+- [The whole book on one page](https://questaodeetica.biblioverse.org/en/complete-book.html): The original text of the 12 volumes in plain HTML, with no scripts.
+- [About the project](https://questaodeetica.biblioverse.org/en/about.html): The author, how the site is organized and how to cite it.
+
+## Volumes
+- [Volume I: Discussing Speciesism](https://questaodeetica.biblioverse.org/en/v1/): An analysis of the main attempts to justify speciesism
+- [Volume II: Considering Sentient Beings](https://questaodeetica.biblioverse.org/en/v2/): Foundations of a sentience-centered ethics
+- [Volume III: Animals and the Harm of Death](https://questaodeetica.biblioverse.org/en/v3/): An inquiry into the harm of death and its magnitude
+- [Volume IV: The Debate on Animal Exploitation](https://questaodeetica.biblioverse.org/en/v4/): An analysis of the arguments of the opposing views
+- [Volume V: Differences Between Environmentalism and Consideration for Animals](https://questaodeetica.biblioverse.org/en/v5/): How far apart are they?
+- [Volume VI: To Whom Do We Owe Moral Consideration?](https://questaodeetica.biblioverse.org/en/v6/): The debate on the sentience criterion
+- [Volume VII: Ethics and the Situation of Wild Animals](https://questaodeetica.biblioverse.org/en/v7/): An analysis of the question of natural harms
+- [Volume VIII: Effective Activism](https://questaodeetica.biblioverse.org/en/v8/): Criteria for choosing which problems to prioritize and which strategies to adopt
+- [Volume IX: Ethics and the Future](https://questaodeetica.biblioverse.org/en/v9/): What risks of future suffering are and how to prevent them
+- [Volume X: Biases and Their Influence](https://questaodeetica.biblioverse.org/en/v10/): How biases influence our decisions that affect animals
+- [Volume XI: How Do the Various Ethical Theories Approach the Animal Question?](https://questaodeetica.biblioverse.org/en/v11/): Exploring the relationship between normative ethics and applied ethics
+- [Volume XII: The Essentials of Animal Ethics](https://questaodeetica.biblioverse.org/en/v12/): A schematic summary of the main discussions
 
 ## Volume I: Discussing Speciesism
 - [An Overview of the Debate on the Moral Consideration of Animals](https://questaodeetica.biblioverse.org/en/v1/01-an-overview-of-the-debate-on-the-moral-consideration-of.html)
@@ -212,3 +243,26 @@
 - [Evaluating Different Strategies](https://questaodeetica.biblioverse.org/en/v12/16-evaluating-different-strategies.html)
 - [Conclusion](https://questaodeetica.biblioverse.org/en/v12/17-conclusion.html)
 
+## Interactive tools
+- [Speciesism Test](https://questaodeetica.biblioverse.org/en/tools/speciesism-test.html): The four questions from Volume II applied to a practice of your choice.
+- [Birth Lottery](https://questaodeetica.biblioverse.org/en/tools/birth-lottery.html): If you were born as a random exploited animal, what species would you be? With the real numbers.
+- [A Year to Scale](https://questaodeetica.biblioverse.org/en/tools/a-year-to-scale.html): If all animals were one year, how many seconds would the exploited ones be?
+- [Benefit of the Doubt](https://questaodeetica.biblioverse.org/en/tools/benefit-of-the-doubt.html): The decision matrix for when we do not know whether a being can feel.
+- [Harm of Death Calculator](https://questaodeetica.biblioverse.org/en/tools/harm-of-death.html): Lifetime lost and quality of life: the reasoning behind QALYs.
+- [Priority Calculator](https://questaodeetica.biblioverse.org/en/tools/priorities.html): Severity, tractability and neglectedness: where does a resource help most?
+- [Spot the Argument](https://questaodeetica.biblioverse.org/en/tools/spot-the-argument.html): Read a common saying and find out which attempted justification it uses.
+- [How Serious Is an S-Risk?](https://questaodeetica.biblioverse.org/en/tools/s-risks.html): Severity times probability: compare scenarios of future suffering.
+- [Veil of Impartiality](https://questaodeetica.biblioverse.org/en/tools/veil-of-impartiality.html): Choose rules without knowing who you will be among those affected.
+- [Bias Detector](https://questaodeetica.biblioverse.org/en/tools/bias-detector.html): Everyday situations for recognizing the biases from Volume X.
+- [Theory Calculator](https://questaodeetica.biblioverse.org/en/tools/theory-calculator.html): Sum, average, maximin, priority, equality, sufficiency: see what each theory chooses.
+
+## Other languages
+- [Português (original)](https://questaodeetica.biblioverse.org/llms.txt)
+- [Español](https://questaodeetica.biblioverse.org/es/llms.txt)
+
+## Optional
+- [Full text in Markdown](https://questaodeetica.biblioverse.org/llms-full-en.txt): the original text of the 12 volumes, with notes, in a single file.
+- [Reading paths](https://questaodeetica.biblioverse.org/en/reading-paths.html)
+- [Quizzes and review](https://questaodeetica.biblioverse.org/en/quizzes.html)
+- [For teachers](https://questaodeetica.biblioverse.org/en/teachers.html)
+- [Sitemap](https://questaodeetica.biblioverse.org/en/sitemap.xml)

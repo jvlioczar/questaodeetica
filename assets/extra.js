@@ -276,7 +276,7 @@
       x.fillStyle = '#ffffff'; x.font = '700 34px "Plus Jakarta Sans", Arial, sans-serif'; x.fillText('Luciano Carlos Cunha', 90, 1170);
       x.fillStyle = '#bfe8fa'; x.font = '500 28px "Plus Jakarta Sans", Arial, sans-serif';
       var loc = local.length > 60 ? local.slice(0, 58) + '…' : local; x.fillText(loc, 90, 1215);
-      x.fillText('Questão de Ética · questaodeetica.biblioverse.org', 90, 1275);
+      x.fillText(L('Questão de Ética', 'A Question of Ethics', 'Cuestión de Ética') + ' · questaodeetica.biblioverse.org', 90, 1275);
     };
     var compartilha = function (t) {
       var c = modal(L('Compartilhar trecho', 'Share passage'), '<canvas class="cv-trecho" width="1080" height="1350" aria-label="' + L('Imagem com o trecho', 'Image with the passage') + '"></canvas><p class="jan-btns"><button type="button" class="btn" data-k="img">' + L('Baixar imagem', 'Download image') + '</button><button type="button" class="btn alt" data-k="link">' + L('Copiar link do trecho', 'Copy link to passage') + '</button>' + (navigator.share ? '<button type="button" class="btn alt" data-k="share">' + L('Compartilhar…', 'Share…') + '</button>' : '') + '</p><p class="fino">' + L('O link abre esta página já rolada e com o trecho destacado (nos navegadores que aceitam esse recurso).', 'The link opens this page scrolled to the passage, with it highlighted (in browsers that support this feature).') + '</p>');
@@ -528,7 +528,7 @@
       ls.set('jea-dest', dest); lista();
     });
     $('#jor-exp').addEventListener('click', function () {
-      var md = L('# Meus destaques · Questão de Ética\n\nTextos de Luciano Carlos Cunha, coleção Uma Jornada pela Ética Animal.\n\n', '# My highlights · Questão de Ética\n\nTexts by Luciano Carlos Cunha, from the collection A Journey Through Animal Ethics.\n\n');
+      var md = L('# Meus destaques · Questão de Ética\n\nTextos de Luciano Carlos Cunha, coleção Uma Jornada pela Ética Animal.\n\n', '# My highlights · A Question of Ethics\n\nTexts by Luciano Carlos Cunha, from the collection A Journey Through Animal Ethics.\n\n', '# Mis destacados · Cuestión de Ética\n\nTextos de Luciano Carlos Cunha, de la colección Un recorrido por la ética animal.\n\n');
       Object.keys(dest).forEach(function (k) {
         var c = J.c[k]; if (!c) return;
         md += '## ' + c[0] + ' (Vol. ' + c[2] + (c[3] ? L(', cap. ', ', ch. ') + c[3] : '') + ')\n' + location.origin + location.pathname.replace(/minha-jornada\.html$/, '') + c[1] + '\n\n';
