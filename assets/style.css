@@ -178,7 +178,7 @@ button.lido[aria-pressed="true"]{background:var(--noite);color:#fff}
 .prefs{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
 .prefs button{font:500 .76rem var(--sans);background:var(--cartao);border:0;box-shadow:inset 0 0 0 1px var(--linha);border-radius:99px;padding:4px 11px;cursor:pointer;color:var(--tinta)}
 .prefs button[aria-pressed="true"]{background:var(--noite);color:#fff;box-shadow:none}
-@media (max-width:980px){.leitura{grid-template-columns:1fr;gap:14px}.toc{position:relative;top:0;max-height:none;background:var(--cartao);border-radius:16px;padding:14px 18px;box-shadow:var(--sombra)}.col{margin:0 auto}}
+@media (max-width:980px){.leitura{grid-template-columns:minmax(0,1fr);gap:14px}.toc{position:relative;top:0;max-height:none;background:var(--cartao);border-radius:16px;padding:14px 18px;box-shadow:var(--sombra)}.col{margin:0 auto;width:100%}}
 .original{font-size:var(--fs);line-height:1.8;color:var(--texto)}
 .original p{margin:0 0 1.1em}
 .original h2{font-size:1.45rem;margin-top:1.9em}
@@ -276,6 +276,8 @@ a.int{text-decoration-style:dotted}
 .pager a span{display:block;font:500 .74rem var(--sans);color:var(--suave);margin-bottom:2px}
 .pager .prox{text-align:right}
 .pager a:hover{transform:translateY(-2px);box-shadow:var(--sombra2)}
+.pager{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:520px){.pager{grid-template-columns:minmax(0,1fr)}.pager .prox{text-align:left}}
 .recom{margin-top:56px;text-align:center}
 .recom h2{margin:0 0 .2em}
 .recom .cgrade{margin-top:20px;text-align:left}
@@ -402,6 +404,7 @@ legend{font:600 1rem var(--serif);color:var(--tinta);padding:0 6px}
 /* cabeçalho e migalhas alinhados à coluna estreita do conteúdo */
 main:has(.cab+.estreito) .migalhas ol,.cab:has(+.estreito) .cab-in{max-width:800px;margin-left:auto;margin-right:auto;padding-inline:24px;box-sizing:border-box}
 .cab:has(+.estreito) .cab-arte svg{width:84px;height:84px}
+@media (max-width:400px){.cab-arte{display:none}}
 /* página de texto: cabeçalho alinhado à coluna do texto, à esquerda */
 .cap-cab{text-align:left}
 .cap-cab .wrap-l,main:has(.leitura) .migalhas ol{max-width:1120px;padding-left:316px;padding-right:24px;box-sizing:border-box;margin-left:auto;margin-right:auto}
@@ -569,6 +572,7 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .simples-cta:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1.5px var(--ceu),var(--sombra);color:var(--texto)}
 .sc-ic{flex:none;width:38px;height:38px;border-radius:12px;background:var(--noite);color:#fff;display:grid;place-items:center;font-size:1.05rem}
 .sc-seta{margin-left:auto;font-size:1.3rem;color:var(--noite)}
+.simples-cta>span:not(.sc-ic):not(.sc-seta){min-width:0;overflow-wrap:anywhere}
 .simples-aviso{background:var(--areia);border-radius:16px;padding:12px 16px;font-size:.92rem;margin-bottom:18px}
 .simples-aviso p{margin:0}
 .simples-sum{background:var(--cartao);border-radius:16px;box-shadow:var(--sombra);padding:12px 18px;margin-bottom:22px}
@@ -598,6 +602,9 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .idioma:hover{background:#ffffff1f;color:#fff}
 @media (max-width:1080px){.idiomas{margin-left:auto}.idiomas~.bbusca{margin-left:0}}
 @media (max-width:420px){.idiomas{gap:4px}.idioma{padding:5px 8px;font-size:.72rem}}
+@media (max-width:360px){.topo-in{gap:8px}.marca{padding-right:4px;font-size:.92rem}.idiomas{margin-right:0}.idioma{padding:4px 6px}.bbusca{padding:6px 9px}}
+.original table,.col table{max-width:100%}
+@media (max-width:420px){.original table,.col table{table-layout:fixed;width:100%}.original th,.original td,.col th,.col td{overflow-wrap:anywhere;hyphens:auto}}
 
 /* bloco de destaque logo depois de outra seção: sem somar dois espaçamentos */
 .secao+.secao:has(> .cta:only-child){padding-top:0}
@@ -639,3 +646,19 @@ mark.dest.com-nota{border-bottom:2px solid var(--coral)}
 .fmt-linha{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
 .chip-fmt{border:1.5px solid var(--linha,#d7e3ee);background:#fff;color:inherit;border-radius:99px;padding:6px 14px;font:600 .85rem inherit;cursor:pointer}
 .chip-fmt.on{background:var(--marinho,#0b0a6b);border-color:var(--marinho,#0b0a6b);color:#fff}
+
+/* escolha de leitura (Comece aqui e Volume XII) e aviso para quem chega pelo "Ler o essencial" */
+.escolha{background:var(--cartao);border-radius:22px;padding:22px 22px 14px;box-shadow:var(--sombra);margin:0 0 26px}
+.escolha h2{margin:0 0 14px;font-size:1.3rem}
+.escolha-op{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.esc-op{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--texto);border-radius:18px;padding:16px 18px;box-shadow:inset 0 0 0 1.5px var(--linha);transition:transform .2s,box-shadow .2s}
+.esc-op.simples{background:linear-gradient(135deg,#e8f6fd,#eef0ff)}
+.esc-op.completa{background:var(--areia)}
+.esc-op:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1.5px var(--ceu),var(--sombra2);color:var(--texto)}
+.esc-op strong{font:600 1.12rem/1.2 var(--serif);color:var(--tinta)}
+.esc-op>span:last-child{font-size:.95rem;line-height:1.45;color:var(--suave)}
+.eo-ic{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--noite);color:#fff;font-size:1rem}
+.escolha .fino{margin:12px 0 0}
+.aviso-essencial{border-left:4px solid var(--ceu)}
+.aviso-essencial h2{margin-top:0}
+@media (max-width:620px){.escolha-op{grid-template-columns:minmax(0,1fr)}}

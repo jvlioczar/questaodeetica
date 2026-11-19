@@ -620,3 +620,13 @@
     carrega(0);
   }
 })();
+
+/* Volume XII: mostra o aviso só para quem chegou pelo botão “Ler o essencial” da página inicial (pt, en ou es) */
+(function () {
+  var a = document.querySelector('[data-veio-da-home]');
+  if (!a || !document.referrer) return;
+  try {
+    var r = new URL(document.referrer);
+    if (r.origin === location.origin && /^\/(en\/|es\/)?(index\.html)?$/.test(r.pathname)) a.hidden = false;
+  } catch (e) {}
+})();
