@@ -108,7 +108,8 @@ p{margin:.6em 0 .9em}
 .area .ccard .ic{background:var(--areia)}
 .mais-cards{text-align:center;margin:28px 0 0}
 .cta{background:var(--noite);color:var(--sobre2);border-radius:26px;padding:clamp(26px,4vw,44px);display:flex;flex-wrap:wrap;gap:20px 40px;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
-.cta::after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(closest-side,#4bbbe855,transparent)}
+.cta::after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(closest-side,#4bbbe855,transparent);pointer-events:none;z-index:0}
+.cta>*{position:relative;z-index:1}
 .cta h2{color:#fff;margin:.1em 0 .3em}
 .cta .kicker{color:var(--sol)}
 .cta p{margin:0;max-width:36em}
